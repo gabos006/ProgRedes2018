@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace OblPR.Server
 {
     internal class ClientHandler
     {
-        private Func<User, object> p;
-        private Socket socket;
-        private User user;
+        private Socket _socket;
+        private UserHandler _userManager;
 
-        public ClientHandler(User user, Socket socket, Func<User, object> p)
+        public ClientHandler(Socket socket, UserHandler userManager)
         {
-            this.user = user;
-            this.socket = socket;
-            this.p = p;
+            this._userManager = userManager;
+            this._socket = socket;
+        }
+
+        public void Start()
+        {
+
+
         }
     }
 }
