@@ -13,13 +13,16 @@ namespace OblPR.Server
 {
     internal class ClientHandler
     {
-        private ILoginManager _loginManager;
-        private IUserManager _userManager;
-        private Socket _socket;
+        private readonly ILoginManager _loginManager;
+        private readonly IUserManager _userManager;
+        private readonly MessageHandler _messageHandler;
+        private readonly Socket _socket;
+
         private User _user;
 
         public ClientHandler(ILoginManager loginManager, IUserManager userManager, Socket socket)
         {
+            _messageHandler = new MessageHandler();
             _loginManager = loginManager;
             _userManager = userManager;
             _socket = socket;
@@ -48,7 +51,7 @@ namespace OblPR.Server
             var message = new Message(Command.REQUEST_LOGIN, null);
             try
             {
-                MessageHandler.SendMessage(_socket, message);
+                _messageHandler.Send(_socket, message);
                 HandleLoginResponse();
             }
             catch (SocketException e)

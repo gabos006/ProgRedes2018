@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using OblPR.Protocol;
 
-namespace OblPR.Protocol
+namespace OblPR.Server
 {
-    public static class MessageHandler
+    public  class MessageHandler
     {
-        public static void Send(Socket socket, Message message)
+        public  void Send(Socket socket, Message message)
         {
             SendPayloadSize(socket, message);
             SendMessage(socket, message);
         }
 
-        private static void SendMessage(Socket socket, Message message)
+        private  void SendMessage(Socket socket, Message message)
         {
             var head = 0;
             var current = 0;
@@ -35,7 +36,7 @@ namespace OblPR.Protocol
             }
         }
 
-        private static void SendPayloadSize(Socket socket, Message message)
+        private  void SendPayloadSize(Socket socket, Message message)
         {
             var head = 0;
             var current = 0;
