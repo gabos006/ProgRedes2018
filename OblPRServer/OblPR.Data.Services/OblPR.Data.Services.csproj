@@ -40,8 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameServer.cs" />
+    <Compile Include="IUserManager.cs" />
     <Compile Include="ServerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OblPR.Data.Entities\OblPR.Data.Entities.csproj">
+      <Project>{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}</Project>
+      <Name>OblPR.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Server\OblPR.Server.csproj">
+      <Project>{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}</Project>
+      <Name>OblPR.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

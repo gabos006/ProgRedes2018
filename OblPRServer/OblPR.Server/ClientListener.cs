@@ -6,20 +6,18 @@ using System.Threading;
 
 namespace OblPR.Server
 {
-    public class Server : IServer
+    public class ClientListener
     {
         private bool _isRuning;
         private readonly int _port;
         private readonly string _ipAddr;
 
-        private readonly UserHandler _userManager;
         private Socket _server;
 
-        public Server(string ipAddr, int port)
+        public ClientListener(string ipAddr, int port)
         {
             this._ipAddr = ipAddr;
             this._port = port;
-            this._userManager = new UserHandler();
         }
 
 
@@ -67,7 +65,7 @@ namespace OblPR.Server
         private void HandleClient(Socket socket)
         {
 
-            var client = new ClientHandler(socket, _userManager);
+            var client = new ClientHandler(socket);
             client.Start();
         }
 

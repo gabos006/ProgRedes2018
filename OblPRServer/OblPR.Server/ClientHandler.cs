@@ -8,11 +8,9 @@ namespace OblPR.Server
     internal class ClientHandler
     {
         private Socket _socket;
-        private UserHandler _userManager;
 
-        public ClientHandler(Socket socket, UserHandler userManager)
+        public ClientHandler(Socket socket)
         {
-            this._userManager = userManager;
             this._socket = socket;
         }
 
