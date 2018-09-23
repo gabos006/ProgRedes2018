@@ -1,21 +1,24 @@
 ﻿using System;
+using OblPR.Data.Services;
 using OblPR.Server;
 
-namespace OblPR.Data.Services
+namespace OblPR.Game
 {
     public class GameServer
     {
-        private IUserManager _userManager;
+        private readonly IUserManager _userManager;
+        private readonly ILoginManager _loginManager;
 
-        public GameServer(IUserManager userManager)
+        public GameServer(IUserManager userManager, ILoginManager loginManager)
         {
             this._userManager = userManager;
+            this._loginManager = loginManager;
         }
 
         public void StartServer(string ip, int port)
         {
-            var server = new ClientListener(ip, port);
-            server.Start();
+            var server = new ClientListener(_userManager, _loginManager);
+            server.StartListening(ip, port);
             MainMenu();
         }
 

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Server", "OblPR.Serve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Game", "OblPR.Game\OblPR.Game.csproj", "{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Protocol", "OblPR.Protocol\OblPR.Protocol.csproj", "{4553CEEF-F072-48C8-9E16-E2A8B968DB70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4553CEEF-F072-48C8-9E16-E2A8B968DB70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4553CEEF-F072-48C8-9E16-E2A8B968DB70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4553CEEF-F072-48C8-9E16-E2A8B968DB70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4553CEEF-F072-48C8-9E16-E2A8B968DB70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

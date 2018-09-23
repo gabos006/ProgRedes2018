@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <ProjectReference Include="..\OblPR.Data.Services\OblPR.Data.Services.csproj">
       <Project>{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}</Project>
       <Name>OblPR.Data.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Server\OblPR.Server.csproj">
+      <Project>{8b79b7c5-f13b-4d3a-83e8-c42f369f125b}</Project>
+      <Name>OblPR.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,6 +8,5 @@ namespace OblPR.Data.Services
         void AddUser(User user);
         IEnumerator<User> getAllRegisteredUsers();
         IEnumerator<User> getAllActiveUsers();
-
     }
 }

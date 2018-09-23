@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using OblPR.Data.Services;
 
 namespace OblPR.Server
 {
     public class ClientListener
     {
         private bool _isRuning;
-        private readonly int _port;
-        private readonly string _ipAddr;
-
         private Socket _server;
+        private readonly IUserManager _userManager;
+        private readonly ILoginManager _loginManager;
 
-        public ClientListener(string ipAddr, int port)
+        public ClientListener(IUserManager userManager, ILoginManager loginManager)
         {
-            this._ipAddr = ipAddr;
-            this._port = port;
+            _userManager = userManager;
+            _loginManager = loginManager;
         }
 
-
-        public void Start()
+        public void StartListening(string ip, int port)
         {
             var listener = new Thread(() =>
             {
@@ -35,10 +33,10 @@ namespace OblPR.Server
                         ProtocolType.Tcp
                     );
                     var endpoint = new IPEndPoint(
-                        IPAddress.Parse(_ipAddr),
-                        _port);
+                        IPAddress.Parse(ip),
+                        port);
 
-                    Console.WriteLine("Listening on : {0}", endpoint.ToString());
+                    Console.WriteLine("Listening on : {0}", endpoint);
                     _server.Bind(endpoint);
                     _server.Listen(0);
 
@@ -56,6 +54,7 @@ namespace OblPR.Server
                 catch (Exception e)
                 {
                     Console.WriteLine("Failed to start server");
+                    Console.WriteLine(e.Message);
                 }
 
             });
@@ -64,16 +63,16 @@ namespace OblPR.Server
 
         private void HandleClient(Socket socket)
         {
-
-            var client = new ClientHandler(socket);
-            client.Start();
+            
+            var client = new ClientHandler(_loginManager, _userManager, socket);
+            client.Connect();
         }
 
         public void Stop()
         {
             if (!_isRuning) return;
-            this._server.Close();
-            this._isRuning = false;
+            _server.Close();
+            _isRuning = false;
         }
     }
 }
