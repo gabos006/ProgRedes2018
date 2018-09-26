@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OblPR.Data.Entities
 {
-    public class User
+    public class Player
     {
-        public User(string nickname)
+        public Player(string nickname)
         {
             Nick = nickname;
         }

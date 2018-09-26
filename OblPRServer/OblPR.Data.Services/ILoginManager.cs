@@ -9,7 +9,7 @@ namespace OblPR.Data.Services
 {
     public interface ILoginManager
     {
-        User Login(string userName);
+        Player Login(string userName);
         void Logout(string userName);
     }
 }

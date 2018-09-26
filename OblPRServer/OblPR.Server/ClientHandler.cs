@@ -1,9 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using OblPR.Data.Entities;
 using OblPR.Data.Services;
@@ -14,16 +10,16 @@ namespace OblPR.Server
     internal class ClientHandler
     {
         private readonly ILoginManager _loginManager;
-        private readonly IUserManager _userManager;
+        private readonly IPlayerManager _playerManager;
         private readonly Socket _socket;
 
-        private User _user;
+        private Player _player;
 
 
-        public ClientHandler(ILoginManager loginManager, IUserManager userManager, Socket socket)
+        public ClientHandler(ILoginManager loginManager, IPlayerManager playerManager, Socket socket)
         {
             _loginManager = loginManager;
-            _userManager = userManager;
+            _playerManager = playerManager;
             _socket = socket;
         }
 
@@ -37,8 +33,10 @@ namespace OblPR.Server
 
         private void Disconnect()
         {
-            _loginManager.Logout(_user.Nick);
-            //cosas
+            if (LoggedIn())
+                _loginManager.Logout(_player.Nick);
+            if (ClientConnected())
+                _socket.Close();
         }
 
         private void ListenClientRequests()
@@ -49,7 +47,7 @@ namespace OblPR.Server
                 {
                     var message = MessageHandler.RecieveMessage(_socket);
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     Disconnect();
                 }
@@ -60,7 +58,7 @@ namespace OblPR.Server
 
         private void HandleClientLogin()
         {
-            while (!LoggedIn())
+            while (!LoggedIn() && ClientConnected())
             {
                 try
                 {
@@ -70,20 +68,20 @@ namespace OblPR.Server
                     {
                         try
                         {
-                            _loginManager.Login(pmessage.Parameters[0].Value);
-
+                            _player = _loginManager.Login(pmessage.Parameters[0].Value);
+                            Console.WriteLine("hola");
                         }
-                        catch (PlayerNotFoundException e)
+                        catch (PlayerNotFoundException)
                         {
-
+                            //cosas
                         }
-                        catch (PlayerInUseException e)
+                        catch (PlayerInUseException)
                         {
-
+                            //otras cosas
                         }
                     }
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     Disconnect();
                 }
@@ -93,7 +91,7 @@ namespace OblPR.Server
 
         private bool LoggedIn()
         {
-            return (this._user != null);
+            return _player != null;
         }
 
         private bool ClientConnected()

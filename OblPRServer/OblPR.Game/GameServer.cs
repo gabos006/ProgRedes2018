@@ -6,18 +6,18 @@ namespace OblPR.Game
 {
     public class GameServer
     {
-        private readonly IUserManager _userManager;
+        private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
 
-        public GameServer(IUserManager userManager, ILoginManager loginManager)
+        public GameServer(IPlayerManager playerManager, ILoginManager loginManager)
         {
-            this._userManager = userManager;
+            this._playerManager = playerManager;
             this._loginManager = loginManager;
         }
 
         public void StartServer(string ip, int port)
         {
-            var server = new ClientListener(_userManager, _loginManager);
+            var server = new ClientListener(_playerManager, _loginManager);
             server.StartListening(ip, port);
             MainMenu();
         }

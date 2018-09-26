@@ -25,7 +25,7 @@ namespace OblPR.Client
 
             var message = new ProtocolMessage();
             message.Command = "login";
-            var parameter = new ProtocolParameter("name", "dario");
+            var parameter = new ProtocolParameter("name", "Dario");
             message.Parameters.Add(parameter);
             var payload = new Message(message);
             MessageHandler.SendMessage(client, payload);

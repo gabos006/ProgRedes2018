@@ -10,12 +10,12 @@ namespace OblPR.Server
     {
         private bool _isRuning;
         private Socket _server;
-        private readonly IUserManager _userManager;
+        private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
 
-        public ClientListener(IUserManager userManager, ILoginManager loginManager)
+        public ClientListener(IPlayerManager playerManager, ILoginManager loginManager)
         {
-            _userManager = userManager;
+            _playerManager = playerManager;
             _loginManager = loginManager;
         }
 
@@ -64,7 +64,7 @@ namespace OblPR.Server
         private void HandleClient(Socket socket)
         {
             
-            var client = new ClientHandler(_loginManager, _userManager, socket);
+            var client = new ClientHandler(_loginManager, _playerManager, socket);
             client.Connect();
         }
 

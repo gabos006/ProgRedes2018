@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Data.DataAccess", "OblPR.Data.DataAccess\OblPR.Data.DataAccess.csproj", "{0173744F-E57E-4DD1-B373-8A35973F5F6E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Data.Entities", "OblPR.Data.Entities\OblPR.Data.Entities.csproj", "{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Data.Services", "OblPR.Data.Services\OblPR.Data.Services.csproj", "{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0173744F-E57E-4DD1-B373-8A35973F5F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0173744F-E57E-4DD1-B373-8A35973F5F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0173744F-E57E-4DD1-B373-8A35973F5F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0173744F-E57E-4DD1-B373-8A35973F5F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
