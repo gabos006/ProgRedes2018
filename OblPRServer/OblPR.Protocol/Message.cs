@@ -3,27 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using OblPR.Server;
 
 namespace OblPR.Protocol
 {
     public class Message
     {
-        public Message(int command, byte[] payload)
+        private byte[] _payload;
+        private ProtocolMessage _pmessage;
+
+        public Message(byte[] payload)
         {
-            Command = command;
-            Payload = payload;
+            _payload = payload;
+            _pmessage = JsonConvert.DeserializeObject<ProtocolMessage>(
+                Convert.ToBase64String(_payload)
+                );
         }
 
-        public int Command { get; private set; }
-        public byte[] Payload { get; private set; }
-
-        public int Size
+        public Message(ProtocolMessage message)
         {
-            get
-            {
-                return (this.Payload == null) ? 0 : Payload.Length;
-            }
+            var jsonString = JsonConvert.SerializeObject(message);
+            _payload = Convert.FromBase64String(jsonString);
         }
 
+        public byte[] Payload => _payload;
+
+        public int Size => _payload.Length;
     }
 }

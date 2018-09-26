@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace OblPR.Protocol
 {
-    public class Command
+    public static class Command
     {
 
-        public static int REQUEST_LOGIN = 0;
-        public static int LOGIN = 1;
+        public const int LOGIN = 1;
+
+
+
 
     }
 }

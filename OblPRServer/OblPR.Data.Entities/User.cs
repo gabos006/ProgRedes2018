@@ -8,5 +8,10 @@ namespace OblPR.Data.Entities
 {
     public class User
     {
+        public User(string nickname)
+        {
+            Nick = nickname;
+        }
+        public string Nick { get; }
     }
 }

@@ -15,14 +15,13 @@ namespace OblPR.Server
     {
         private readonly ILoginManager _loginManager;
         private readonly IUserManager _userManager;
-        private readonly MessageHandler _messageHandler;
         private readonly Socket _socket;
 
         private User _user;
 
+
         public ClientHandler(ILoginManager loginManager, IUserManager userManager, Socket socket)
         {
-            _messageHandler = new MessageHandler();
             _loginManager = loginManager;
             _userManager = userManager;
             _socket = socket;
@@ -30,41 +29,55 @@ namespace OblPR.Server
 
         public void Connect()
         {
-            RequestClientLogin();
+            HandleClientLogin();
             var requestThread = new Thread(ListenClientRequests);
             requestThread.Start();
 
         }
 
-        public void Disconnect()
+        private void Disconnect()
         {
-
+            _loginManager.Logout(_user.Nick);
+            //cosas
         }
 
-        private void ListenClientRequests() { 
-        
-            throw new NotImplementedException();
-        }
-
-        private void RequestClientLogin()
+        private void ListenClientRequests()
         {
-            var message = new Message(Command.REQUEST_LOGIN, null);
-            try
+            var done = false;
+            while (!done)
             {
-                _messageHandler.Send(_socket, message);
-                HandleLoginResponse();
+                var message = MessageHandler.RecieveMessage(_socket);
+                try
+                {
+                    ParseMessage(message);
+
+                }
+                catch (SocketException e)
+                {
+                    done = true;
+                }
             }
-            catch (SocketException e)
-            {
-                Disconnect();
-            }
+
         }
 
-        private void HandleLoginResponse()
+
+
+        private void HandleClientLogin()
         {
-            throw new NotImplementedException();
+            while (!LoggedIn())
+            {
+                var message = MessageHandler.RecieveMessage(_socket);
+                var objectMessage = JsonConvert.DeserializeObject<ProtocolMessage>(message.JSONString);
+                try
+                {
+                    
+                }
+            }
         }
 
-
+        private bool LoggedIn()
+        {
+            return (this._user != null);
+        }
     }
 }
