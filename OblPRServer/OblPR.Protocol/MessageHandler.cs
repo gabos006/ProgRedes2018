@@ -37,7 +37,7 @@ namespace OblPR.Protocol
         private static int RecievePayloadSize(Socket socket)
         {
             var sizeBuf = new byte[sizeof(int)];
-            SocketTransfer(sizeBuf, socket.Send);
+            SocketTransfer(sizeBuf, socket.Receive);
             return BitConverter.ToInt32(sizeBuf, 0);
         }
 

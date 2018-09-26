@@ -43,29 +43,50 @@ namespace OblPR.Server
 
         private void ListenClientRequests()
         {
-            var done = false;
-            while (!done)
+            while (ClientConnected())
             {
-                var message = MessageHandler.RecieveMessage(_socket);
                 try
                 {
-
+                    var message = MessageHandler.RecieveMessage(_socket);
                 }
                 catch (SocketException e)
                 {
-                    done = true;
+                    Disconnect();
                 }
             }
 
         }
 
 
-
         private void HandleClientLogin()
         {
             while (!LoggedIn())
             {
-                var message = MessageHandler.RecieveMessage(_socket);
+                try
+                {
+                    var recieved = MessageHandler.RecieveMessage(_socket);
+                    var pmessage = recieved.PMessage;
+                    if (pmessage.Command.Equals("login"))
+                    {
+                        try
+                        {
+                            _loginManager.Login(pmessage.Parameters[0].Value);
+
+                        }
+                        catch (PlayerNotFoundException e)
+                        {
+
+                        }
+                        catch (PlayerInUseException e)
+                        {
+
+                        }
+                    }
+                }
+                catch (SocketException e)
+                {
+                    Disconnect();
+                }
 
             }
         }
@@ -73,6 +94,11 @@ namespace OblPR.Server
         private bool LoggedIn()
         {
             return (this._user != null);
+        }
+
+        private bool ClientConnected()
+        {
+            return _socket != null && _socket.Connected;
         }
     }
 }
