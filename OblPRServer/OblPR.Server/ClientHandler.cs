@@ -49,7 +49,6 @@ namespace OblPR.Server
                 var message = MessageHandler.RecieveMessage(_socket);
                 try
                 {
-                    ParseMessage(message);
 
                 }
                 catch (SocketException e)
@@ -67,11 +66,7 @@ namespace OblPR.Server
             while (!LoggedIn())
             {
                 var message = MessageHandler.RecieveMessage(_socket);
-                var objectMessage = JsonConvert.DeserializeObject<ProtocolMessage>(message.JSONString);
-                try
-                {
-                    
-                }
+
             }
         }
 
