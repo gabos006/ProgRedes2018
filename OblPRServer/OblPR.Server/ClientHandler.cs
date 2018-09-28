@@ -55,7 +55,6 @@ namespace OblPR.Server
 
         }
 
-
         private void HandleClientLogin()
         {
             while (!LoggedIn() && ClientConnected())

@@ -6,7 +6,7 @@ using OblPR.Data.Services;
 
 namespace OblPR.Server
 {
-    public class ClientListener
+    public class ClientListener:IClientNotifier
     {
         private bool _isRuning;
         private Socket _server;
@@ -73,6 +73,21 @@ namespace OblPR.Server
             if (!_isRuning) return;
             _server.Close();
             _isRuning = false;
+        }
+
+        public void NotifyPlayerNear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyDamageTaken()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyMatchEnd()
+        {
+            throw new NotImplementedException();
         }
     }
 }
