@@ -12,16 +12,12 @@ namespace OblPR.Client
             Console.Write("Please, insert your nickname: ");
             var nickname = Console.ReadLine().Trim();
 
-            //var message = new ProtocolMessage();
-            //message.Command = Command.LOGIN;
-            //var parameter = new ProtocolParameter("name", nickname);
-            //message.Parameters.Add(parameter);
-            //var payload = new Message(message);
-            //MessageHandler.SendMessage(socket, payload);
-
-            //Response
-
-        
+            var message = new ProtocolMessage();
+            message.Command = "login";
+            var parameter = new ProtocolParameter("name", nickname);
+            message.Parameters.Add(parameter);
+            var payload = new Message(message);
+            MessageHandler.SendMessage(socket, payload);
 
         }
     }
