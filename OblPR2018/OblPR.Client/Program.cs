@@ -17,46 +17,33 @@ namespace OblPR.Client
         {
             int? selectedOption = null;
             bool connected = false;
+            bool exit = false;
 
-            while (selectedOption != Command.EXIT)
+            PrintConnectionMenu();
+            selectedOption = HandleMenuInput(2);
+
+            if (selectedOption == ClientCommand.DISCONNECT)
+                exit = true;
+            else
             {
-                if (!connected)
+                if (selectedOption == ClientCommand.CONNECT)
                 {
-                    PrintConnectionMenu();
-                    selectedOption = HandleMenuInput(2);
-                }
-                else
-                {
-                    PrintMainMenu();
-                    selectedOption = HandleMenuInput(7);
-                }
+                    clientConnected = ConnectToServer();
+                    connected = (clientConnected != null);
 
-
-                if (selectedOption == Command.EXIT)
-                    break;
-                else
-                {
-                    if (selectedOption == Command.CONNECT)
+                    if (!connected)
                     {
-                        clientConnected = ConnectToServer();
-                        connected = true;
+                        exit = true;
                     }
                     else
                     {
-                        if (selectedOption == Command.DISCONNECT)
-                        {
-                            DisconnectFromServer();
-                            connected = false;
-                        }
-                        else
-                        {
-                            var selectedHandler = HandleEvent(selectedOption);
-                            clientConnected.AcceptHandler(selectedHandler);
-                        }
+                        PrintMainMenu();
+                        selectedOption = HandleMenuInput(7);
+                        var selectedHandler = HandleEvent(selectedOption);
+                        clientConnected.AcceptHandler(selectedHandler);
                     }
                 }
             }
-
         }
 
         private static void PrintMainMenu()
@@ -66,7 +53,6 @@ namespace OblPR.Client
             Console.WriteLine("*********************************");
             Console.WriteLine("1 - Login");
             Console.WriteLine("2 - Add Player");
-            Console.WriteLine("7 - Logout");
             Console.WriteLine("0 - Exit\n");
         }
 
@@ -76,8 +62,7 @@ namespace OblPR.Client
             Console.WriteLine("* WELCOME TO SLASHER SIMULATION SYSTEM *");
             Console.WriteLine("**************************************************");
             Console.WriteLine("1 - Connect to server");
-            Console.WriteLine("2 - Disconnect from server");
-            Console.WriteLine("0 - Exit\n");
+            Console.WriteLine("0 - Disconnect from server\n");
         }
 
         private static int? HandleMenuInput(int options)
@@ -121,7 +106,7 @@ namespace OblPR.Client
             Console.Write("Insert server port: ");
             var SERVER_PORT = int.Parse(Console.ReadLine().Trim());
 
-            var CLIENT_IP = "127.0.0.1";
+            var CLIENT_IP = "192.168.1.3";
 
             Console.Write("Insert client port: ");
             var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());

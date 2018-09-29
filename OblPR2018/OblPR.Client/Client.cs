@@ -22,7 +22,6 @@ namespace OblPR.Client
             var ipEndpoint = IpEndpoint();
 
             var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Bind(ipEndpoint);
             socket.Connect(serverEndpoint.Socket);
             this.socket = socket;
         }
