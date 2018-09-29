@@ -8,7 +8,7 @@ namespace OblPR.Protocol
         {
             Parameters = new List<ProtocolParameter>();
         }
-        public string Command { get; set; }
+        public int Command { get; set; }
         public List<ProtocolParameter> Parameters { get; private set; }
     }
 }

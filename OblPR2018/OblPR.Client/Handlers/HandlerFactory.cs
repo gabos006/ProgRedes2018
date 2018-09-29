@@ -8,14 +8,11 @@ namespace OblPR.Client
         {
             switch (selectedCommand)
             {
-                case Command.LOGIN:
+                case ClientCommand.LOGIN:
                     return new Login();
 
-                case Command.ADD_PLAYER:
+                case ClientCommand.ADD_PLAYER:
                     return new AddPlayer();
-
-                case Command.LOGOUT:
-                    return new Logout();
 
                 default:
                     return null;
