@@ -46,8 +46,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientCommand.cs" />
     <Compile Include="Handlers\AddPlayer.cs" />
-    <Compile Include="Handlers\HandlerFactory.cs" />
-    <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\Login.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

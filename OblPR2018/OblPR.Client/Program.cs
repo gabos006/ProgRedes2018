@@ -17,31 +17,62 @@ namespace OblPR.Client
         {
             int? selectedOption = null;
             bool connected = false;
-            bool exit = false;
 
-            PrintConnectionMenu();
-            selectedOption = HandleMenuInput(2);
-
-            if (selectedOption == ClientCommand.DISCONNECT)
-                exit = true;
-            else
+            while (selectedOption != ClientCommand.DISCONNECT)
             {
+                PrintConnectionMenu();
+                selectedOption = HandleMenuInput(2);
+
                 if (selectedOption == ClientCommand.CONNECT)
                 {
                     clientConnected = ConnectToServer();
                     connected = (clientConnected != null);
 
-                    if (!connected)
+                    if (connected)
                     {
-                        exit = true;
+                        selectedOption = null;
+
+                        while (selectedOption != ClientCommand.DISCONNECT)
+                        {
+                            PrintMainMenu();
+                            selectedOption = HandleMenuInput(3);
+                            if (selectedOption != ClientCommand.DISCONNECT)
+                            {
+                                if (selectedOption == ClientCommand.LOGIN)
+                                {
+                                    var logged = clientConnected.Login();
+
+                                    if (logged)
+                                    {
+                                        selectedOption = null;
+
+                                        while (selectedOption != ClientCommand.DISCONNECT)
+                                        {
+                                            PrintLoggedMenu();
+                                            selectedOption = HandleMenuInput(3);
+                                            if (selectedOption != ClientCommand.DISCONNECT)
+                                            {
+                                                //ACCIONES PARA COMENZAR PARTIDA
+                                            }
+                                            else
+                                                DisconnectFromServer();
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (selectedOption == ClientCommand.ADD_PLAYER)
+                                    {
+                                        // LLAMAR LOGICA DEL ADD PLAYER
+                                    }
+                                }
+                            }
+                            else
+                                DisconnectFromServer(); 
+                        }
                     }
                     else
-                    {
-                        PrintMainMenu();
-                        selectedOption = HandleMenuInput(7);
-                        var selectedHandler = HandleEvent(selectedOption);
-                        clientConnected.AcceptHandler(selectedHandler);
-                    }
+                        DisconnectFromServer();
                 }
             }
         }
@@ -49,18 +80,28 @@ namespace OblPR.Client
         private static void PrintMainMenu()
         {
             Console.WriteLine("\n*********************************");
-            Console.WriteLine("*           MAIN MENU          *");
+            Console.WriteLine("*          MAIN MENU         *");
             Console.WriteLine("*********************************");
             Console.WriteLine("1 - Login");
             Console.WriteLine("2 - Add Player");
             Console.WriteLine("0 - Exit\n");
         }
 
+        private static void PrintLoggedMenu()
+        {
+            Console.WriteLine("\n*********************************");
+            Console.WriteLine("*           ACTIVE GAME          *");
+            Console.WriteLine("*********************************");
+            Console.WriteLine("1 - Connect like Monster");
+            Console.WriteLine("2 - Connect like Survivor");
+            Console.WriteLine("0 - Exit\n");
+        }
+
         private static void PrintConnectionMenu()
         {
-            Console.WriteLine("\n**************************************************");
+            Console.WriteLine("\n*********************************************");
             Console.WriteLine("* WELCOME TO SLASHER SIMULATION SYSTEM *");
-            Console.WriteLine("**************************************************");
+            Console.WriteLine("*********************************************");
             Console.WriteLine("1 - Connect to server");
             Console.WriteLine("0 - Disconnect from server\n");
         }
@@ -93,27 +134,35 @@ namespace OblPR.Client
             return 0;
         }
 
-        private static IHandler HandleEvent(int? selectedOption)
-        {
-            return HandlerFactory.Handler(selectedOption);
-        }
-
         private static Client ConnectToServer()
         {
-            Console.Write("Insert server ip: ");
-            var SERVER_IP = Console.ReadLine().Trim();
+            //Console.Write("Insert server ip: ");
+            //var SERVER_IP = Console.ReadLine().Trim();
 
-            Console.Write("Insert server port: ");
-            var SERVER_PORT = int.Parse(Console.ReadLine().Trim());
+            //Console.Write("Insert server port: ");
+            //var SERVER_PORT = int.Parse(Console.ReadLine().Trim());
+
+            //var CLIENT_IP = "192.168.1.3";
+
+            //Console.Write("Insert client port: ");
+            //var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());
 
             var CLIENT_IP = "192.168.1.3";
-
-            Console.Write("Insert client port: ");
-            var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());
+            var SERVER_IP = "192.168.1.110";
+            var CLIENT_PORT = 5000;
+            var SERVER_PORT = 4000;
 
             clientConnected = new Client(CLIENT_IP, CLIENT_PORT);
-            clientConnected.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
+            try
+            {
 
+                clientConnected.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("The Server is down!!");
+                clientConnected = null;
+            }
             return clientConnected;
         }
 

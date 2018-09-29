@@ -31,9 +31,10 @@ namespace OblPR.Client
             socket.Close();
         }
 
-        public void AcceptHandler(IHandler handler)
+        public bool Login()
         {
-            handler.OnHandle(socket);
+            Login login = new Login();
+            return login.DoLogin(socket);
         }
     }
 }
