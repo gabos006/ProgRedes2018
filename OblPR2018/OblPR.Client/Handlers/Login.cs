@@ -8,17 +8,7 @@ namespace OblPR.Client
     {
         public void OnHandle(Socket socket)
         {
-
-            Console.Write("Please, insert your nickname: ");
-            var nickname = Console.ReadLine().Trim();
-
-            var message = new ProtocolMessage();
-            message.Command = "login";
-            var parameter = new ProtocolParameter("name", nickname);
-            message.Parameters.Add(parameter);
-            var payload = new Message(message);
-            MessageHandler.SendMessage(socket, payload);
-
+            throw new NotImplementedException();
         }
     }
 }
