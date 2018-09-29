@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OblPR.Protocol
+﻿namespace OblPR.Protocol
 {
     public static class Command
     {
 
+        public const int EXIT = 0;
         public const int LOGIN = 1;
-
-
-
-
+        public const int LOGOUT = 7;
     }
 }
