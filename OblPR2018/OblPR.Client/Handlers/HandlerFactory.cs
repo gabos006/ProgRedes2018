@@ -11,6 +11,9 @@ namespace OblPR.Client
                 case Command.LOGIN:
                     return new Login();
 
+                case Command.ADD_PLAYER:
+                    return new AddPlayer();
+
                 case Command.LOGOUT:
                     return new Logout();
 

@@ -19,7 +19,6 @@ namespace OblPR.Client
             var payload = new Message(message);
             MessageHandler.SendMessage(socket, payload);
 
-            Console.WriteLine("Login Successfully");
         }
     }
 }

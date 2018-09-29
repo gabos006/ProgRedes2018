@@ -67,6 +67,7 @@ namespace OblPR.Client
             Console.WriteLine("*           MAIN MENU          *");
             Console.WriteLine("*********************************");
             Console.WriteLine("1 - Login");
+            Console.WriteLine("2 - Add Player");
             Console.WriteLine("7 - Logout");
             Console.WriteLine("0 - Exit\n");
         }
