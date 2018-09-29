@@ -1,22 +1,16 @@
-﻿using OblPR.Protocol;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OblPR.Client
 {
     class Program
     {
         public static Client clientConnected;
+        public static bool connected = false;
 
         static void Main(string[] args)
         {
             int? selectedOption = null;
-            bool connected = false;
 
             while (selectedOption != ClientCommand.DISCONNECT)
             {
@@ -25,8 +19,7 @@ namespace OblPR.Client
 
                 if (selectedOption == ClientCommand.CONNECT)
                 {
-                    clientConnected = ConnectToServer();
-                    connected = (clientConnected != null);
+                    ConnectToServer();
 
                     if (connected)
                     {
@@ -134,7 +127,7 @@ namespace OblPR.Client
             return 0;
         }
 
-        private static Client ConnectToServer()
+        private static void ConnectToServer()
         {
             //Console.Write("Insert server ip: ");
             //var SERVER_IP = Console.ReadLine().Trim();
@@ -153,17 +146,8 @@ namespace OblPR.Client
             var SERVER_PORT = 4000;
 
             clientConnected = new Client(CLIENT_IP, CLIENT_PORT);
-            try
-            {
 
-                clientConnected.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("The Server is down!!");
-                clientConnected = null;
-            }
-            return clientConnected;
+            connected = clientConnected.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
         }
 
         private static void DisconnectFromServer()

@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    class Client
+    public class Client
     {
         private string ip;
         private int port;
@@ -17,18 +18,32 @@ namespace OblPR.Client
 
         private IPEndPoint IpEndpoint() => new IPEndPoint(IPAddress.Parse(ip), port);
 
-        public void Connect(ServerEndpoint serverEndpoint)
+        public bool Connect(ServerEndpoint serverEndpoint)
         {
-            var ipEndpoint = IpEndpoint();
+            var connected = false;
 
-            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(serverEndpoint.Socket);
-            this.socket = socket;
+            try
+            {
+                var ipEndpoint = IpEndpoint();
+
+                var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                socket.Connect(serverEndpoint.Socket);
+                this.socket = socket;
+                connected = true;
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("The server is down!!");
+                connected = false;
+            }
+
+            return connected;
         }
 
         public void Disconnect()
         {
-            socket.Close();
+            if (socket != null )
+                socket.Close();
         }
 
         public bool Login()

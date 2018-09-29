@@ -2,7 +2,7 @@
 
 namespace OblPR.Client
 {
-    class ServerEndpoint
+    public class ServerEndpoint
     {
 
         private string ip;

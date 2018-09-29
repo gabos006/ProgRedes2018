@@ -45,8 +45,9 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="ClientCommand.cs" />
-    <Compile Include="Handlers\AddPlayer.cs" />
-    <Compile Include="Handlers\Login.cs" />
+    <Compile Include="Actions\AddPlayer.cs" />
+    <Compile Include="Actions\Login.cs" />
+    <Compile Include="ClientRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerEndpoint.cs" />

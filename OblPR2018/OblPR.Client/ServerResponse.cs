@@ -24,7 +24,7 @@ namespace OblPR.Client
                 }
 
             }
-            catch (Exception ex)
+            catch (SocketException)
             {
                 Console.WriteLine("The server is down!!");
                 haveResponse = false;
