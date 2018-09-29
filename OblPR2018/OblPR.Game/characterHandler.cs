@@ -9,8 +9,8 @@ namespace OblPR.Game
 {
     public class CharacterHandler : ICharacterHandler
     {
-        private int _x;
-        private int _y;
+        public int CoordX { get; set; }
+        public int CoordY { get; set; }
 
         private IGameController _controller;
         private IClientNotifier _notifier;
@@ -18,17 +18,17 @@ namespace OblPR.Game
 
         public void Attack()
         {
-            throw new NotImplementedException();
+            _controller.Attack(this);
         }
 
         public void ExitMatch()
         {
-            throw new NotImplementedException();
+            _controller.PlayerExit(this);
         }
 
         public void Move(int x, int y)
         {
-            throw new NotImplementedException();
+            _controller.MovePlayer(this, x, y);
         }
     }
 }

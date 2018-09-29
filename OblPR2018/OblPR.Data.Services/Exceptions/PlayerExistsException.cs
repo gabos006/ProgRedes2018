@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace OblPR.Data.Services
 {
     [Serializable]
-    internal class PlayerExistsException : Exception
+    public class PlayerExistsException : Exception
     {
         public PlayerExistsException()
         {

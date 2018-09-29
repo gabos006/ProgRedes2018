@@ -13,5 +13,10 @@ namespace OblPR.Data.Entities
             Nick = nickname;
         }
         public string Nick { get; }
+
+        public override string ToString()
+        {
+            return Nick;
+        }
     }
 }

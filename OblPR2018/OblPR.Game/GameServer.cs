@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using OblPR.Data.Services;
 using OblPR.Server;
+using OblPR.Data.Entities;
 
 namespace OblPR.Game
 {
@@ -30,9 +32,6 @@ namespace OblPR.Game
                 var choice = ReadChoice();
                 switch (choice)
                 {
-                    case "c":
-                        CreatePlayerMenu();
-                        break;
                     case "s":
                         DisplayConnectedPlayersMenu();
                         break;
@@ -54,28 +53,31 @@ namespace OblPR.Game
 
         private void DisplayAllPlayersMenu()
         {
-            throw new NotImplementedException();
+            var enumerator = _playerManager.GetAllRegisteredPlayers();
+            while (enumerator.MoveNext())
+            {
+                Console.WriteLine(enumerator.Current);
+            }
+            Console.WriteLine("");
+
         }
 
         private void DisplayConnectedPlayersMenu()
         {
-            throw new NotImplementedException();
+            var enumerator = _playerManager.GetAllActivePlayers();
+            while (enumerator.MoveNext())
+            {
+                Console.WriteLine(enumerator.Current);
+            }
+            Console.WriteLine("");
         }
 
         private void DisplayPosibleChoices()
         {
             Console.WriteLine("Welcome!");
-            Console.WriteLine("Press c to create a new player");
             Console.WriteLine("Press s to show connected players");
             Console.WriteLine("Press a to show all players");
             Console.WriteLine("Press m to start a new match");
-        }
-
-
-
-        private void CreatePlayerMenu()
-        {
-            throw new NotImplementedException();
         }
 
         private string ReadChoice()

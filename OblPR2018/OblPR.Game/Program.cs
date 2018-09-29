@@ -14,8 +14,9 @@ namespace OblPR.Game
             var data = new PlayerData();
             IPlayerManager playerManager = new PlayerManager(data);
             ILoginManager loginManager = new LoginManager(data);
+
             var gameServer = new GameServer(playerManager, loginManager);
-            gameServer.StartServer("127.0.0.1", 4000);
+            gameServer.StartServer("192.168.1.110", 4000);
         }
     }
 }

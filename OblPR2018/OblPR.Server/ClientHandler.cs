@@ -63,20 +63,30 @@ namespace OblPR.Server
                 {
                     var recieved = MessageHandler.RecieveMessage(_socket);
                     var pmessage = recieved.PMessage;
-                    if (pmessage.Command.Equals("login"))
+                    if (pmessage.Command.Equals(Command.LOGIN));
                     {
                         try
                         {
                             _player = _loginManager.Login(pmessage.Parameters[0].Value);
-                            Console.WriteLine("hola");
+
+                            var param = new ProtocolParameter("message", "Logged in");
+                            var protoMessage = new ProtocolMessage();
+                            protoMessage.Command = Command.OK;
+                            protoMessage.Parameters.Add(param);
                         }
                         catch (PlayerNotFoundException)
                         {
-                            //cosas
+                            var param = new ProtocolParameter("message", "PlayerNotFound");
+                            var protoMessage = new ProtocolMessage();
+                            protoMessage.Command = Command.ERROR;
+                            protoMessage.Parameters.Add(param);
                         }
                         catch (PlayerInUseException)
                         {
-                            //otras cosas
+                            var param = new ProtocolParameter("message", "PlayerInUse");
+                            var protoMessage = new ProtocolMessage();
+                            protoMessage.Command = Command.ERROR;
+                            protoMessage.Parameters.Add(param);
                         }
                     }
                 }
@@ -86,6 +96,7 @@ namespace OblPR.Server
                 }
 
             }
+            ListenClientRequests();
         }
 
         private bool LoggedIn()

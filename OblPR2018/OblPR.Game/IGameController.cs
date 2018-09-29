@@ -1,6 +1,9 @@
 ﻿namespace OblPR.Game
 {
-    internal interface IGameController
+    public interface IGameController
     {
+        void Attack(ICharacterHandler characterHandler);
+        void PlayerExit(ICharacterHandler characterHandler);
+        void MovePlayer(ICharacterHandler characterHandler, int x, int y);
     }
 }
