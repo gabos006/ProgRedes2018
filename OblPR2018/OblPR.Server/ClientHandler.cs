@@ -63,22 +63,6 @@ namespace OblPR.Server
                 {
                     var recieved = MessageHandler.RecieveMessage(_socket);
                     var pmessage = recieved.PMessage;
-                    if (pmessage.Command.Equals("login"))
-                    {
-                        try
-                        {
-                            _player = _loginManager.Login(pmessage.Parameters[0].Value);
-                            Console.WriteLine("hola");
-                        }
-                        catch (PlayerNotFoundException)
-                        {
-                            //cosas
-                        }
-                        catch (PlayerInUseException)
-                        {
-                            //otras cosas
-                        }
-                    }
                 }
                 catch (SocketException)
                 {

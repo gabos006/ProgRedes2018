@@ -50,12 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
+    <Compile Include="LoginPayload.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageHandler.cs" />
+    <Compile Include="AbstractPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProtocolMessage.cs" />
-    <Compile Include="ProtocolParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

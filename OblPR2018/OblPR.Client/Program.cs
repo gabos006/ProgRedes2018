@@ -15,6 +15,7 @@ namespace OblPR.Client
 
         static void Main(string[] args)
         {
+<<<<<<< HEAD
             int? selectedOption = null;
             bool connected = false;
 
