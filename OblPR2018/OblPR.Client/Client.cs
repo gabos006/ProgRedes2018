@@ -27,10 +27,7 @@ namespace OblPR.Client
             this.socket = socket;
         }
 
-        public void AcceptHandler(IHandler handler)
-        {
-            handler.OnHandle(socket);
-        }
+
     }
 }
 
