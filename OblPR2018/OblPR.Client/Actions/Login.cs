@@ -4,9 +4,9 @@ using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    public class Login : IHandler
+    public class Login
     {
-        public void OnHandle(Socket socket)
+        public bool DoLogin(Socket socket)
         {
 
             Console.Write("Please, insert your nickname: ");
@@ -20,8 +20,9 @@ namespace OblPR.Client
             MessageHandler.SendMessage(socket, payload);
 
             //Response
-            ServerResponse response = new ServerResponse(socket);
-            response.RecieveResponse();
+            ServerResponse response = new ServerResponse();
+
+            return response.RecieveResponse(socket);
         }
     }
 }
