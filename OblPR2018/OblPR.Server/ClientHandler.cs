@@ -61,8 +61,9 @@ namespace OblPR.Server
             {
                 try
                 {
+                    var commandDispatcher = new CommandDispatcher();
                     var recieved = MessageHandler.RecieveMessage(_socket);
-                    var pmessage = recieved.PMessage;
+                    var action = commandDispatcher.Dispatch(recieved.PMessage);
                 }
                 catch (SocketException)
                 {

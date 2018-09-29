@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="IActionHandler.cs" />
+    <Compile Include="ICommandDispatcher.cs" />
+    <Compile Include="LoginHandler.cs" />
     <Compile Include="LoginPayload.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageHandler.cs" />
@@ -59,6 +63,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OblPR.Data.Entities\OblPR.Data.Entities.csproj">
+      <Project>{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}</Project>
+      <Name>OblPR.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Data.Services\OblPR.Data.Services.csproj">
+      <Project>{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}</Project>
+      <Name>OblPR.Data.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
