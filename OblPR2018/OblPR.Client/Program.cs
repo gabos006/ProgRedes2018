@@ -11,52 +11,50 @@ namespace OblPR.Client
 {
     class Program
     {
+        public static Client clientConnected;
+
         static void Main(string[] args)
         {
-            //var client = new Socket(AddressFamily.InterNetwork, // IPv4
-            //    SocketType.Stream,
-            //    ProtocolType.Tcp);
-
-
-            //client.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4000)); // Me conecto con el server
-
-            //Console.WriteLine("Conected to server");
-            //Console.ReadLine();
-
-            //var message = new ProtocolMessage();
-            //message.Command = "login";
-            //var parameter = new ProtocolParameter("name", "Dario");
-            //message.Parameters.Add(parameter);
-            //var payload = new Message(message);
-            //MessageHandler.SendMessage(client, payload);
-
-
-
-            Console.WriteLine("*** Welcome to the Game Slash ***");
-            Console.WriteLine("*** Connecting to server... ***");
-
-            var SERVER_IP = "127.0.0.1";
-            var SERVER_PORT = 4000;
-            var CLIENT_IP = "127.0.0.1";
-            var CLIENT_PORT = 6000;
-
-            var client = new Client(CLIENT_IP, CLIENT_PORT);
-            client.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
-
             int? selectedOption = null;
+            bool connected = false;
 
             while (selectedOption != Command.EXIT)
             {
-                PrintMainMenu();
+                if (!connected)
+                {
+                    PrintConnectionMenu();
+                    selectedOption = HandleMenuInput(2);
+                }
+                else
+                {
+                    PrintMainMenu();
+                    selectedOption = HandleMenuInput(7);
+                }
 
-                selectedOption = HandleMenuInput();
 
                 if (selectedOption == Command.EXIT)
                     break;
-
-                var selectedHandler = HandleEvent(selectedOption);
-
-                client.AcceptHandler(selectedHandler);
+                else
+                {
+                    if (selectedOption == Command.CONNECT)
+                    {
+                        clientConnected = ConnectToServer();
+                        connected = true;
+                    }
+                    else
+                    {
+                        if (selectedOption == Command.DISCONNECT)
+                        {
+                            DisconnectFromServer();
+                            connected = false;
+                        }
+                        else
+                        {
+                            var selectedHandler = HandleEvent(selectedOption);
+                            clientConnected.AcceptHandler(selectedHandler);
+                        }
+                    }
+                }
             }
 
         }
@@ -72,7 +70,17 @@ namespace OblPR.Client
             Console.WriteLine("0 - Exit\n");
         }
 
-        private static int HandleMenuInput()
+        private static void PrintConnectionMenu()
+        {
+            Console.WriteLine("\n**************************************************");
+            Console.WriteLine("* WELCOME TO SLASHER SIMULATION SYSTEM *");
+            Console.WriteLine("**************************************************");
+            Console.WriteLine("1 - Connect to server");
+            Console.WriteLine("2 - Disconnect from server");
+            Console.WriteLine("0 - Exit\n");
+        }
+
+        private static int? HandleMenuInput(int options)
         {
             var isOptionValid = false;
             while (!isOptionValid)
@@ -80,10 +88,10 @@ namespace OblPR.Client
                 try
                 {
                     var selectedOption = int.Parse(Console.ReadLine());
-                    if (selectedOption < 0 || selectedOption > 7)
+                    if (selectedOption < 0 || selectedOption > options)
                     {
                         isOptionValid = false;
-                        Console.WriteLine("Please input a number between 0 and 7");
+                        Console.WriteLine("Please input a number between 0 and " + options);
                     }
                     else
                     {
@@ -103,6 +111,30 @@ namespace OblPR.Client
         private static IHandler HandleEvent(int? selectedOption)
         {
             return HandlerFactory.Handler(selectedOption);
+        }
+
+        private static Client ConnectToServer()
+        {
+            Console.Write("Insert server ip: ");
+            var SERVER_IP = Console.ReadLine().Trim();
+
+            Console.Write("Insert server port: ");
+            var SERVER_PORT = int.Parse(Console.ReadLine().Trim());
+
+            var CLIENT_IP = "127.0.0.1";
+
+            Console.Write("Insert client port: ");
+            var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());
+
+            clientConnected = new Client(CLIENT_IP, CLIENT_PORT);
+            clientConnected.Connect(new ServerEndpoint(SERVER_IP, SERVER_PORT));
+
+            return clientConnected;
+        }
+
+        private static void DisconnectFromServer()
+        {
+            clientConnected.Disconnect();
         }
     }
 }
