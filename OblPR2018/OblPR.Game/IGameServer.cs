@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OblPR.Data.Entities;
 
 namespace OblPR.Game
 {
-
+    public interface IGameServer
+    {
+        ICharacterHandler JoinGame(IClientNotifier notifier, AbstractCharacter character);
+    }
 }

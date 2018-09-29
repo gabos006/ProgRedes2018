@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using OblPR.Data.Services;
+using OblPR.Game;
 
 namespace OblPR.Server
 {
@@ -12,11 +13,13 @@ namespace OblPR.Server
         private Socket _server;
         private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
+        private readonly IGameServer _gameServer;
 
-        public ClientListener(IPlayerManager playerManager, ILoginManager loginManager)
+        public ClientListener(IPlayerManager playerManager, ILoginManager loginManager, IGameServer gameServer)
         {
             _playerManager = playerManager;
             _loginManager = loginManager;
+            _gameServer = gameServer;
         }
 
         public void StartListening(string ip, int port)
@@ -64,7 +67,7 @@ namespace OblPR.Server
         private void HandleClient(Socket socket)
         {
             
-            var client = new ClientHandler(_loginManager, _playerManager, socket);
+            var client = new ClientHandler(_loginManager, _playerManager, _gameServer, socket);
             client.Connect();
         }
 

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using OblPR.Data.Entities;
 using OblPR.Data.Services;
+using OblPR.Game;
 using OblPR.Protocol;
 
 namespace OblPR.Server
@@ -11,16 +12,17 @@ namespace OblPR.Server
     {
         private readonly ILoginManager _loginManager;
         private readonly IPlayerManager _playerManager;
+        private readonly IGameServer _gameServer;
         private readonly Socket _socket;
 
         private Player _player;
 
-
-        public ClientHandler(ILoginManager loginManager, IPlayerManager playerManager, Socket socket)
+        public ClientHandler(ILoginManager loginManager, IPlayerManager playerManager, IGameServer gameServer, Socket socket)
         {
-            _loginManager = loginManager;
-            _playerManager = playerManager;
-            _socket = socket;
+            this._loginManager = loginManager;
+            this._playerManager = playerManager;
+            this._gameServer = gameServer;
+            this._socket = socket;
         }
 
         public void Connect()
@@ -33,6 +35,7 @@ namespace OblPR.Server
 
         private void Disconnect()
         {
+
             if (LoggedIn())
                 _loginManager.Logout(_player.Nick);
             if (ClientConnected())
@@ -73,6 +76,7 @@ namespace OblPR.Server
                             var protoMessage = new ProtocolMessage();
                             protoMessage.Command = Command.OK;
                             protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
                         }
                         catch (PlayerNotFoundException)
                         {
@@ -80,6 +84,8 @@ namespace OblPR.Server
                             var protoMessage = new ProtocolMessage();
                             protoMessage.Command = Command.ERROR;
                             protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+
                         }
                         catch (PlayerInUseException)
                         {
@@ -87,6 +93,7 @@ namespace OblPR.Server
                             var protoMessage = new ProtocolMessage();
                             protoMessage.Command = Command.ERROR;
                             protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
                         }
                     }
                 }

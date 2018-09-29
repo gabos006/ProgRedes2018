@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using OblPR.GameImp;
 using OblPR.Data.Services;
 using OblPR.Server;
-using OblPR.Data.Entities;
 
-namespace OblPR.Game
+namespace OblPR.GameImpl
 {
     public class GameServer
     {
         private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
+        private readonly GameController _gameController;
 
         public GameServer(IPlayerManager playerManager, ILoginManager loginManager)
         {
             this._playerManager = playerManager;
             this._loginManager = loginManager;
+            this._gameController = new GameController();
         }
 
         public void StartServer(string ip, int port)
         {
-            var server = new ClientListener(_playerManager, _loginManager);
+            var server = new ClientListener(_playerManager, _loginManager, _gameController);
             server.StartListening(ip, port);
             MainMenu();
         }
@@ -85,5 +87,8 @@ namespace OblPR.Game
             var choice = Console.ReadLine();
             return choice;
         }
+
+
+
     }
 }

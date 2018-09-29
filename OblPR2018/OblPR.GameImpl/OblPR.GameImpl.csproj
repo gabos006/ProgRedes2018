@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{072D73B0-CD3E-4953-ABA6-333FB6CEE150}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OblPR.Data.Services</RootNamespace>
-    <AssemblyName>OblPR.Data.Services</AssemblyName>
+    <RootNamespace>OblPR.GameImpl</RootNamespace>
+    <AssemblyName>OblPR.GameImpl</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,25 +29,36 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayerData.cs" />
-    <Compile Include="Exceptions\PlayerInUseException.cs" />
-    <Compile Include="ILoginManager.cs" />
-    <Compile Include="IPlayerManager.cs" />
-    <Compile Include="LoginManager.cs" />
-    <Compile Include="Exceptions\PlayerExistsException.cs" />
-    <Compile Include="PlayerManager.cs" />
+    <Compile Include="CharacterHandler.cs" />
+    <Compile Include="GameController.cs" />
+    <Compile Include="GameServer.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Exceptions\PlayerNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OblPR.Data.Entities\OblPR.Data.Entities.csproj">
-      <Project>{2B505A8A-9AC4-4810-8808-1A43EEC6A1E8}</Project>
+      <Project>{2b505a8a-9ac4-4810-8808-1a43eec6a1e8}</Project>
       <Name>OblPR.Data.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Data.Services\OblPR.Data.Services.csproj">
+      <Project>{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}</Project>
+      <Name>OblPR.Data.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Game\OblPR.Game.csproj">
+      <Project>{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}</Project>
+      <Name>OblPR.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Server\OblPR.Server.csproj">
+      <Project>{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}</Project>
+      <Name>OblPR.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -36,7 +36,7 @@ namespace OblPR.Data.Services
             lock (Locker)
             {
 
-                if (!_playerData.RegisteredPlayers.Any(x => x.Nick.Equals(userName)))
+                if (_playerData.RegisteredPlayers.Any(x => x.Nick.Equals(userName)))
                     _playerData.ActivePlayers.RemoveAll(x => x.Nick.Equals(userName));
             }
         }

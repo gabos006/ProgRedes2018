@@ -1,4 +1,5 @@
-﻿namespace OblPR.Game
+﻿
+namespace OblPR.Game
 {
     public interface IGameController
     {
