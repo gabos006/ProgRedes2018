@@ -42,7 +42,7 @@ namespace OblPR.Game
             _activePlayers.Clear();
             _isRunning = true;
             StartTimer();
-            while (_isRunning){}
+            while (_isRunning) { }
         }
 
         private void StartTimer()
@@ -82,9 +82,12 @@ namespace OblPR.Game
 
             if (survivors > 0)
             {
-                foreach (var handler in _activePlayers)
+                var handlers = _activePlayers.ToList().GetEnumerator();
+
+                while (handlers.MoveNext())
                 {
-                    PlayerExit(handler, "surivors win");
+                    PlayerExit(handlers.Current, "surivors win");
+
                 }
                 return;
             }

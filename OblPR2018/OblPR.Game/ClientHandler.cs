@@ -14,6 +14,7 @@ namespace OblPR.Game
         private readonly IPlayerManager _playerManager;
         private readonly IControlsProvider _controlsProvider;
         private ICharacterHandler _characterHandler;
+
         private readonly Socket _socket;
         private Thread _requestThread;
 
@@ -36,14 +37,27 @@ namespace OblPR.Game
 
         private void HandleGameStart()
         {
+
+
             HandleCharacterSelection();
-            _requestThread = new Thread(HandleGameCommands);
-            _requestThread.Start();
+            if (ClientConnected() && HasGameControls())
+            {
+                _requestThread = new Thread(HandleGameCommands);
+                _requestThread.Start();
+            }
+
+
+
+        }
+
+        private bool HasGameControls()
+        {
+            return _characterHandler != null;
         }
 
         private void HandleCharacterSelection()
         {
-            while (ClientConnected() && _characterHandler == null)
+            while (ClientConnected() && !HasGameControls())
             {
                 try
                 {
@@ -81,17 +95,17 @@ namespace OblPR.Game
 
         private void Disconnect()
         {
-
+            if (HasGameControls())
+                _characterHandler.ExitMatch();
             if (LoggedIn())
                 _loginManager.Logout(_player.Nick);
             if (ClientConnected())
                 _socket.Close();
-            _characterHandler?.ExitMatch();
         }
 
         private void HandleGameCommands()
         {
-            while (ClientConnected() && _characterHandler != null)
+            while (ClientConnected() && HasGameControls())
             {
                 try
                 {
@@ -145,7 +159,9 @@ namespace OblPR.Game
                 }
                 catch (SocketException)
                 {
+
                     Disconnect();
+
                 }
             }
 
@@ -207,23 +223,27 @@ namespace OblPR.Game
 
         public void NotifyPlayerNear(string result)
         {
-            try
+            if (ClientConnected() && HasGameControls())
             {
-                var param = new ProtocolParameter("message", "Player near!");
-                var protoMessage = new ProtocolMessage { Command = Command.PLAYER_NOTIFICATION };
-                protoMessage.Parameters.Add(param);
-                MessageHandler.SendMessage(_socket, new Message(protoMessage));
-            }
-            catch (SocketException e)
-            {
-                Disconnect();
+                try
+                {
+                    var param = new ProtocolParameter("message", "Player near!");
+                    var protoMessage = new ProtocolMessage { Command = Command.PLAYER_NOTIFICATION };
+                    protoMessage.Parameters.Add(param);
+                    MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                }
+                catch (SocketException e)
+                {
+                    Disconnect();
+                }
             }
 
         }
 
         public void NotifyMatchEnd(string result)
         {
-            this._characterHandler = null;
+            _characterHandler = null;
+
             if (ClientConnected())
             {
                 try
@@ -233,15 +253,14 @@ namespace OblPR.Game
                     protoMessage.Parameters.Add(param);
                     MessageHandler.SendMessage(_socket, new Message(protoMessage));
 
-
-
-                    HandleGameStart();
                 }
                 catch (SocketException e)
                 {
                     Disconnect();
                 }
             }
+
+
         }
     }
 }
