@@ -20,7 +20,19 @@ namespace OblPR.Client
                 if (pMessage.Parameters[0].Name.Equals("message"))
                 {
                     Console.WriteLine(pMessage.Parameters[0].Value);
-                    haveResponse = true;
+                }
+
+                switch (pMessage.Command)
+                {
+                    case Command.OK:
+
+                        haveResponse = true;
+                        break;
+
+                    case Command.ERROR:
+
+                        haveResponse = false;
+                        break;
                 }
 
             }

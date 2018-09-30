@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    public class AddPlayer
+    public class AddPlayer : IAction
     {
         public bool DoAction(Socket socket)
         {
@@ -21,7 +21,6 @@ namespace OblPR.Client
             message.Parameters.Add(paramImage);
             var payload = new Message(message);
             MessageHandler.SendMessage(socket, payload);
-
 
             //Response
             ServerResponse response = new ServerResponse();

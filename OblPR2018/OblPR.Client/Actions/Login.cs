@@ -4,11 +4,10 @@ using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    public class Login
+    public class Login : IAction
     {
-        public bool DoLogin(Socket socket)
+        public bool DoAction(Socket socket)
         {
-
             Console.Write("Please, insert your nickname: ");
             var nickname = Console.ReadLine().Trim();
 
@@ -21,7 +20,6 @@ namespace OblPR.Client
 
             //Response
             ServerResponse response = new ServerResponse();
-
             return response.RecieveResponse(socket);
         }
     }
