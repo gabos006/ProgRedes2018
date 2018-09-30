@@ -22,7 +22,17 @@ namespace OblPR.Client
                 message.Parameters.Add(paramImage);
                 var payload = new Message(message);
                 MessageHandler.SendMessage(socket, payload);
-                return true;
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("The server is down!!");
+                return false;
+            }
+
+            try
+            {
+                ServerResponse response = new ServerResponse();
+                return response.RecieveResponse(socket);
             }
             catch (SocketException)
             {

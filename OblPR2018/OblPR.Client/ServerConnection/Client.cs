@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OblPR.Protocol;
+using System;
 using System.Net;
 using System.Net.Sockets;
 
@@ -9,6 +10,7 @@ namespace OblPR.Client
         private string ip;
         private int port;
         private Socket socket;
+        public bool match_end = false;
 
         public Client(string ip, int port)
         {
@@ -76,12 +78,39 @@ namespace OblPR.Client
             return startActiveGame.DoAction(socket);
         }
 
-        public void ListenServerResponse()
+        public void ListenServerGameResponse()
         {
-            ServerResponse response = new ServerResponse();
-            while (true)
+            while (ClientConnected())
             {
-                var resp = response.RecieveResponse(socket);
+                try
+                {
+                    var response = MessageHandler.RecieveMessage(socket);
+
+                    ProtocolMessage pMessage = response.PMessage;
+                    int commandResponse = response.PMessage.Command;
+
+                    if (pMessage.Parameters[0].Name.Equals("message"))
+                    {
+                        Console.WriteLine(pMessage.Parameters[0].Value);
+                    }
+
+                    switch (pMessage.Command)
+                    {
+                        case Command.MATCH_END:
+
+                            match_end = true;
+                            break;
+
+                        case Command.ERROR:
+
+                            break;
+                    }
+
+                }
+                catch (SocketException)
+                {
+                    Console.WriteLine("The server is down!!");
+                }
             }
         }
 

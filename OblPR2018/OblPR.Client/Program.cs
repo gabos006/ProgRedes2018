@@ -22,9 +22,6 @@ namespace OblPR.Client
                         var connected = ConnectToServer();
                         if (connected)
                         {
-                            //Open to listen server response
-                            Thread thread = new Thread(ListenServerResponse);
-
                             selectedOption = null;
                             while (clientConnected.ClientConnected() && selectedOption != ClientCommand.DISCONNECT)
                             {
@@ -55,8 +52,14 @@ namespace OblPR.Client
                                                         var joined = clientConnected.JoinGame(selectedOption);
                                                         if (joined)
                                                         {
+                                                            //Open to listen server game response
+                                                            Thread thread = new Thread(ListenServerResponse);
+                                                            thread.Start();
+
                                                             selectedOption = null;
-                                                            while (clientConnected.ClientConnected() && selectedOption != ClientCommand.DISCONNECT)
+                                                            while (clientConnected.ClientConnected() && 
+                                                                   selectedOption != ClientCommand.DISCONNECT &&
+                                                                   !clientConnected.match_end)
                                                             {
                                                                 PrintActiveGameMenu();
                                                                 selectedOption = HandleMenuInput(2);
@@ -175,7 +178,7 @@ namespace OblPR.Client
 
         private static void ListenServerResponse()
         {
-            clientConnected.ListenServerResponse();
+            clientConnected.ListenServerGameResponse();
         }
 
         private static bool ConnectToServer()
