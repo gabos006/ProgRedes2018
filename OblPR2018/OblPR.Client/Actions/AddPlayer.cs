@@ -4,9 +4,9 @@ using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    public class AddPlayer
+    public class AddPlayer : IAction
     {
-        public void DoAction(Socket socket)
+        public bool DoAction(Socket socket)
         {
             Console.Write("Insert nickname: ");
             var nickname = Console.ReadLine().Trim();
@@ -22,10 +22,9 @@ namespace OblPR.Client
             var payload = new Message(message);
             MessageHandler.SendMessage(socket, payload);
 
-
             //Response
             ServerResponse response = new ServerResponse();
-            var haveResponse = response.RecieveResponse(socket);
+            return response.RecieveResponse(socket);
         }
     }
 }

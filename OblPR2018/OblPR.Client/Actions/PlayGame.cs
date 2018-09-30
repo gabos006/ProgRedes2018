@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace OblPR.Client
 {
-    public class PlayGame
+    public class PlayGame : IAction
     {
         public int? command;
 
@@ -13,7 +13,7 @@ namespace OblPR.Client
             command = comm;
         }
 
-        public void DoAction(Socket socket)
+        public bool DoAction(Socket socket)
         {
             var message = new ProtocolMessage();
 
@@ -45,7 +45,7 @@ namespace OblPR.Client
 
             //Response
             ServerResponse response = new ServerResponse();
-            var haveResponse = response.RecieveResponse(socket);
+            return response.RecieveResponse(socket);
 
         }
     }

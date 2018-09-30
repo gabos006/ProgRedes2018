@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OblPR.Client
 {
-    public class StartActiveGame
+    public class StartActiveGame : IAction
     {
         private int? command;
 
@@ -17,9 +17,9 @@ namespace OblPR.Client
             command = com;
         }
 
-        public bool JoinActiveGame(Socket socket)
+        public bool DoAction(Socket socket)
         {
-            ProtocolParameter parameter =  null;
+            ProtocolParameter parameter = null;
             var message = new ProtocolMessage();
             message.Command = Command.JOIN_GAME;
 
@@ -39,9 +39,7 @@ namespace OblPR.Client
 
             //Response
             ServerResponse response = new ServerResponse();
-
             return response.RecieveResponse(socket);
-
         }
     }
 }
