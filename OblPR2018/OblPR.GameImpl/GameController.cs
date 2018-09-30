@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using OblPR.Data.Entities;
 using OblPR.Game;
 using OblPR.GameImpl;
+using OblPR.Protocol;
 
-
-namespace OblPR.GameImp
+namespace OblPR.GameImpl
 {
     public class GameController : IGameController, IGameServer
     {
-        private CharacterHandler[][] _board;
-        private readonly List<Player> _deadPlayers;
-
-        private readonly object _actionLock = new object();
-        private int _activePlayers = 0;
         private bool _isRunning = false;
+
+        private CharacterHandler[][] _board;
+        private Timer _timer;
+        private readonly List<Player> _deadPlayers;
+        private readonly List<CharacterHandler> _activePlayers;
+        private readonly object _actionLock = new object();
 
         public GameController()
         {
             _deadPlayers = new List<Player>();
+            _activePlayers = new List<CharacterHandler>();
             InitGameBoard();
         }
 
@@ -32,16 +35,63 @@ namespace OblPR.GameImp
             }
         }
 
-        public void Reset()
+        public void Start()
         {
             InitGameBoard();
             _deadPlayers.Clear();
+            _activePlayers.Clear();
             _isRunning = true;
+            StartTimer();
+            while (_isRunning)
+            {
+                
+            }
         }
 
-        public void Start()
+        private void StartTimer()
         {
-            _isRunning = true;
+            _timer = new System.Threading.Timer(
+                this.TimerEnd, null, Constants.MILISECONDS, Constants.MILISECONDS);
+        }
+
+        private void TimerEnd(object state)
+        {
+            _isRunning = false;
+            _timer.Dispose();
+            EndMatch();
+
+        }
+
+        private void EndMatch()
+        {
+            var survivors = _activePlayers.Count(x => x.Char.CharacterRole.Equals(Role.Survivor));
+            var monsters = _activePlayers.Count(x => x.Char.CharacterRole.Equals(Role.Monster));
+
+            if (survivors == 0 && monsters == 0)
+            {
+                //no gana nadie
+                return;
+            }
+
+            if (survivors == 0 && monsters > 0)
+            {
+                foreach (var handler in _activePlayers)
+                {
+                    PlayerExit(handler, "monsters win");
+                }
+                return;
+            }
+
+
+            if (survivors > 0)
+            {
+                foreach (var handler in _activePlayers)
+                {
+                    PlayerExit(handler, "surivors win");
+                }
+                return;
+            }
+
         }
 
         public void Attack(ICharacterHandler characterHandler)
@@ -49,18 +99,19 @@ namespace OblPR.GameImp
             lock (_actionLock)
             {
                 var handler = (CharacterHandler)characterHandler;
-                var ap = handler.Ap;
-                AttackNearbyPlayers(handler.Position, handler.Ap);
+                var ap = handler.Char.Ap;
+                AttackNearbyPlayers(handler.Position, handler.Char.Ap);
             }
         }
 
-        public void PlayerExit(ICharacterHandler characterHandler)
+        public void PlayerExit(ICharacterHandler characterHandler, string reason)
         {
             lock (_actionLock)
             {
                 var handler = (CharacterHandler)characterHandler;
                 _board[handler.Position.X][handler.Position.Y] = null;
-                handler.ExitMatch();
+                _activePlayers.Remove(handler);
+                handler.Notifier.NotifyMatchEnd(reason);
             }
         }
 
@@ -93,11 +144,14 @@ namespace OblPR.GameImp
             return _board[p.X][p.Y] == null;
         }
 
-        public ICharacterHandler JoinGame(IClientNotifier notifier, AbstractCharacter character)
+        public ICharacterHandler JoinGame(IClientNotifier notifier, Character character)
         {
             lock (_actionLock)
             {
-                if (_activePlayers >= Constants.MAX_PLAYERS)
+                if (!_isRunning)
+                    throw new InvalidMatchException();
+
+                if (_activePlayers.Count >= Constants.MAX_PLAYERS)
                     throw new InvalidPlayerException();
                 if (IsDeadPlayer(character))
                     throw new InvalidPlayerException();
@@ -106,9 +160,10 @@ namespace OblPR.GameImp
 
 
                 var charHandler = new CharacterHandler(this, notifier, character);
+                _activePlayers.Add(charHandler);
+
                 MovePlayerToCell(charHandler, p);
 
-                _activePlayers++;
 
                 NotifyPlayerNear(p);
                 return charHandler;
@@ -139,7 +194,6 @@ namespace OblPR.GameImp
             }
         }
 
-
         private void AttackNearbyPlayers(Point p, int ap)
         {
             for (var i = -1; i <= 1; i++)
@@ -152,11 +206,11 @@ namespace OblPR.GameImp
                         var handler = _board[p.X + i][p.Y + j];
                         if ( handler!= null)
                         {
-                            handler.Health -= ap;
+                            handler.Char.Health -= ap;
                             if (handler.IsCharacterDead())
                             {
-                                _deadPlayers.Add(handler.Player);
-                                PlayerExit(handler);
+                                _deadPlayers.Add(handler.Char.CurentPlayer);
+                                PlayerExit(handler, "You died");
                             }
                         }
                     }
@@ -164,6 +218,7 @@ namespace OblPR.GameImp
 
             }
         }
+
 
         private Point GetEmptyCell()
         {
@@ -185,10 +240,15 @@ namespace OblPR.GameImp
         }
 
 
-        private bool IsDeadPlayer(AbstractCharacter character)
+        private bool IsDeadPlayer(Character character)
         {
             return _deadPlayers.Any(x => x.Nick.Equals(character.CurentPlayer.Nick));
-            ;
+            
+        }
+
+        public bool IsGameAvailable()
+        {
+            return this._isRunning;
         }
     }
 }

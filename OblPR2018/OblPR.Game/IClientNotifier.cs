@@ -8,7 +8,6 @@ namespace OblPR.Game
     public interface IClientNotifier
     {
         void NotifyPlayerNear();
-        void NotifyDamageTaken();
-        void NotifyMatchEnd();
+        void NotifyMatchEnd(string result);
     }
 }

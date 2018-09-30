@@ -13,6 +13,8 @@ namespace OblPR.Server
         private readonly ILoginManager _loginManager;
         private readonly IPlayerManager _playerManager;
         private readonly IGameServer _gameServer;
+        private ICharacterHandler _characterHandler;
+
         private readonly Socket _socket;
 
         private Player _player;
@@ -28,9 +30,18 @@ namespace OblPR.Server
         public void Connect()
         {
             HandleClientLogin();
+            HandleClientJoinGame();
             var requestThread = new Thread(ListenClientRequests);
             requestThread.Start();
 
+        }
+
+        private void HandleClientJoinGame()
+        {
+            while (ClientConnected() && _characterHandler == null)
+            {
+                
+            }
         }
 
         private void Disconnect()

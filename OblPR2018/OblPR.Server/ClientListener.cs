@@ -83,12 +83,9 @@ namespace OblPR.Server
             throw new NotImplementedException();
         }
 
-        public void NotifyDamageTaken()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void NotifyMatchEnd()
+
+        public void NotifyMatchEnd(string result)
         {
             throw new NotImplementedException();
         }

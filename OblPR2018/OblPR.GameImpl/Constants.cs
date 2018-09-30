@@ -10,5 +10,6 @@ namespace OblPR.GameImpl
     {
         public const int BOARD_SIZE = 8;
         public const int MAX_PLAYERS = 8;
+        public const int MILISECONDS = 180000;
     }
 }

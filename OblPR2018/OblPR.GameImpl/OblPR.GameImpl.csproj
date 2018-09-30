@@ -44,6 +44,7 @@
     <Compile Include="Exceptions\InvalidPlayerException.cs" />
     <Compile Include="Exceptions\NoCellAvailableException.cs" />
     <Compile Include="Exceptions\InvalidMoveException.cs" />
+    <Compile Include="Exceptions\InvalidMatchException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,6 +60,10 @@
     <ProjectReference Include="..\OblPR.Game\OblPR.Game.csproj">
       <Project>{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}</Project>
       <Name>OblPR.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OblPR.Protocol\OblPR.Protocol.csproj">
+      <Project>{4553CEEF-F072-48C8-9E16-E2A8B968DB70}</Project>
+      <Name>OblPR.Protocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\OblPR.Server\OblPR.Server.csproj">
       <Project>{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}</Project>

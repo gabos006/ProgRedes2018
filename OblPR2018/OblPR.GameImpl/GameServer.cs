@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using OblPR.GameImp;
 using OblPR.Data.Services;
 using OblPR.Server;
 
@@ -50,7 +49,8 @@ namespace OblPR.GameImpl
 
         private void CreateMatchMenu()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Match Started");
+            _gameController.Start();
         }
 
         private void DisplayAllPlayersMenu()
