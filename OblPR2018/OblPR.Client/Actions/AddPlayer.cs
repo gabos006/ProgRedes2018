@@ -6,7 +6,7 @@ namespace OblPR.Client
 {
     public class AddPlayer
     {
-        public bool DoAction(Socket socket)
+        public void DoAction(Socket socket)
         {
             Console.Write("Insert nickname: ");
             var nickname = Console.ReadLine().Trim();
@@ -25,7 +25,7 @@ namespace OblPR.Client
 
             //Response
             ServerResponse response = new ServerResponse();
-            return response.RecieveResponse(socket);
+            var haveResponse = response.RecieveResponse(socket);
         }
     }
 }

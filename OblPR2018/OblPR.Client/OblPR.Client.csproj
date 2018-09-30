@@ -43,15 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
+    <Compile Include="Actions\PlayGame.cs" />
+    <Compile Include="Actions\StartActiveGame.cs" />
+    <Compile Include="ServerConnection\Client.cs" />
     <Compile Include="ClientCommand.cs" />
     <Compile Include="Actions\AddPlayer.cs" />
     <Compile Include="Actions\Login.cs" />
-    <Compile Include="ClientRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerEndpoint.cs" />
-    <Compile Include="ServerResponse.cs" />
+    <Compile Include="ServerConnection\ServerEndpoint.cs" />
+    <Compile Include="ServerConnection\ServerResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

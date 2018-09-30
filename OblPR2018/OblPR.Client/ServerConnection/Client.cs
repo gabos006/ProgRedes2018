@@ -51,6 +51,30 @@ namespace OblPR.Client
             Login login = new Login();
             return login.DoLogin(socket);
         }
+
+        public void AddPlayer()
+        {
+            AddPlayer addPlayer = new AddPlayer();
+            addPlayer.DoAction(socket);
+        }
+
+        public void Move(int? command)
+        {
+            PlayGame play = new PlayGame(command);
+            play.DoAction(socket);
+        }
+
+        public void Attack(int? command)
+        {
+            PlayGame play = new PlayGame(command);
+            play.DoAction(socket);
+        }
+
+        public bool JoinGame(int? command)
+        {
+            StartActiveGame game = new StartActiveGame(command);
+            return game.JoinActiveGame(socket);
+        }
     }
 }
 
