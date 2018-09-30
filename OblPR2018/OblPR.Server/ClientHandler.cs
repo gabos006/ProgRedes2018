@@ -72,7 +72,7 @@ namespace OblPR.Server
                         {
                             _player = _loginManager.Login(pmessage.Parameters[0].Value);
 
-                            var param = new ProtocolParameter("message", "Logged in");
+                            var param = new ProtocolParameter("message", "LoggedIn");
                             var protoMessage = new ProtocolMessage();
                             protoMessage.Command = Command.OK;
                             protoMessage.Parameters.Add(param);
