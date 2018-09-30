@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\PlayGame.cs" />
     <Compile Include="Actions\StartActiveGame.cs" />
     <Compile Include="ServerConnection\Client.cs" />
