@@ -11,16 +11,31 @@ namespace OblPR.Client
             Console.Write("Please, insert your nickname: ");
             var nickname = Console.ReadLine().Trim();
 
-            var message = new ProtocolMessage();
-            message.Command = Command.LOGIN;
-            var parameter = new ProtocolParameter("name", nickname);
-            message.Parameters.Add(parameter);
-            var payload = new Message(message);
-            MessageHandler.SendMessage(socket, payload);
+            try
+            {
+                var message = new ProtocolMessage();
+                message.Command = Command.LOGIN;
+                var parameter = new ProtocolParameter("name", nickname);
+                message.Parameters.Add(parameter);
+                var payload = new Message(message);
+                MessageHandler.SendMessage(socket, payload);
+            }
+            catch (SocketException)
+            {
+                Console.WriteLine("The server is down!!");
+                return false;
+            }
 
-            //Response
-            ServerResponse response = new ServerResponse();
-            return response.RecieveResponse(socket);
+            try
+            {
+                ServerResponse response = new ServerResponse();
+                return response.RecieveResponse(socket);
+            }
+            catch(SocketException)
+            {
+                Console.WriteLine("The server is down!!");
+                return false;
+            }
         }
     }
 }

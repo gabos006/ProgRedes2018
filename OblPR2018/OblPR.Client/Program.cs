@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace OblPR.Client
 {
@@ -22,7 +23,7 @@ namespace OblPR.Client
                         if (connected)
                         {
                             selectedOption = null;
-                            while (selectedOption != ClientCommand.DISCONNECT)
+                            while (clientConnected.ClientConnected() && selectedOption != ClientCommand.DISCONNECT)
                             {
                                 PrintMainMenu();
                                 selectedOption = HandleMenuInput(3);
@@ -35,7 +36,7 @@ namespace OblPR.Client
                                         if (logged)
                                         {
                                             selectedOption = null;
-                                            while (selectedOption != ClientCommand.DISCONNECT)
+                                            while (clientConnected.ClientConnected() && selectedOption != ClientCommand.DISCONNECT)
                                             {
                                                 PrintLoggedMenu();
                                                 selectedOption = HandleMenuInput(3);
@@ -51,8 +52,14 @@ namespace OblPR.Client
                                                         var joined = clientConnected.JoinGame(selectedOption);
                                                         if (joined)
                                                         {
+                                                            //Open to listen server game response
+                                                            Thread thread = new Thread(ListenServerResponse);
+                                                            thread.Start();
+
                                                             selectedOption = null;
-                                                            while (selectedOption != ClientCommand.DISCONNECT)
+                                                            while (clientConnected.ClientConnected() && 
+                                                                   selectedOption != ClientCommand.DISCONNECT &&
+                                                                   !clientConnected.match_end)
                                                             {
                                                                 PrintActiveGameMenu();
                                                                 selectedOption = HandleMenuInput(2);
@@ -169,6 +176,11 @@ namespace OblPR.Client
             return 0;
         }
 
+        private static void ListenServerResponse()
+        {
+            clientConnected.ListenServerGameResponse();
+        }
+
         private static bool ConnectToServer()
         {
             //Console.Write("Insert server ip: ");
@@ -183,7 +195,7 @@ namespace OblPR.Client
             //var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());
 
             var CLIENT_IP = "192.168.1.3";
-            var SERVER_IP = "192.168.1.3";
+            var SERVER_IP = "192.168.1.110";
             var CLIENT_PORT = 5000;
             var SERVER_PORT = 4000;
 

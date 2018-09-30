@@ -15,38 +15,41 @@ namespace OblPR.Client
 
         public bool DoAction(Socket socket)
         {
-            var message = new ProtocolMessage();
-
-            switch (command)
+            try
             {
-                case ClientCommand.MOVE:
+                var message = new ProtocolMessage();
 
-                    Console.Write("Insert coordinate x: ");
-                    var x = Console.ReadLine().Trim();
-                    Console.Write("Insert coordinate y: ");
-                    var y = Console.ReadLine().Trim();
-                    message.Command = Command.MOVE;
-                    var coordinateX = new ProtocolParameter("x", x);
-                    message.Parameters.Add(coordinateX);
-                    var coordinateY = new ProtocolParameter("y", y);
-                    message.Parameters.Add(coordinateY);
+                switch (command)
+                {
+                    case ClientCommand.MOVE:
 
-                    break;
+                        Console.Write("Insert coordinate x: ");
+                        var x = Console.ReadLine().Trim();
+                        Console.Write("Insert coordinate y: ");
+                        var y = Console.ReadLine().Trim();
+                        message.Command = Command.MOVE;
+                        var coordinateX = new ProtocolParameter("x", x);
+                        message.Parameters.Add(coordinateX);
+                        var coordinateY = new ProtocolParameter("y", y);
+                        message.Parameters.Add(coordinateY);
 
-                case ClientCommand.ATTACK:
+                        break;
 
-                    message.Command = Command.ATTACK;
-                    break;
+                    case ClientCommand.ATTACK:
+
+                        message.Command = Command.ATTACK;
+                        break;
+                }
+
+                var payload = new Message(message);
+                MessageHandler.SendMessage(socket, payload);
+                return true;
             }
-
-            var payload = new Message(message);
-            MessageHandler.SendMessage(socket, payload);
-
-
-            //Response
-            ServerResponse response = new ServerResponse();
-            return response.RecieveResponse(socket);
-
+            catch (SocketException)
+            {
+                Console.WriteLine("The server is down!!");
+                return false;
+            }
         }
     }
 }
