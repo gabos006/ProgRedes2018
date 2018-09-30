@@ -8,17 +8,18 @@ using OblPR.Protocol;
 
 namespace OblPR.Game
 {
-    public class GameController : IGameController, IGameServer
+    public class GameLogic : IGameLogic, IControlsProvider
     {
         private bool _isRunning = false;
 
-        private CharacterHandler[][] _board;
         private Timer _timer;
+        private CharacterHandler[][] _board;
         private readonly List<Player> _deadPlayers;
         private readonly List<CharacterHandler> _activePlayers;
+
         private readonly object _actionLock = new object();
 
-        public GameController()
+        public GameLogic()
         {
             _deadPlayers = new List<Player>();
             _activePlayers = new List<CharacterHandler>();
@@ -41,10 +42,7 @@ namespace OblPR.Game
             _activePlayers.Clear();
             _isRunning = true;
             StartTimer();
-            while (_isRunning)
-            {
-                
-            }
+            while (_isRunning){}
         }
 
         private void StartTimer()
@@ -121,12 +119,12 @@ namespace OblPR.Game
             {
                 var handler = (CharacterHandler)characterHandler;
                 if (!IsValidMove(new Point(handler.Position.X, handler.Position.Y), p))
-                    throw new InvalidMoveException();
+                    throw new InvalidMoveException("Invalid move");
                 if (!CellAvailable(p))
-                    throw new InvalidMoveException();
+                    throw new InvalidMoveException("Invalid move");
 
                 MovePlayerToCell(handler, p);
-                NotifyPlayerNear(p);
+                NotifyPlayerNear(p, handler.Char);
             }
         }
 
@@ -148,11 +146,11 @@ namespace OblPR.Game
             lock (_actionLock)
             {
                 if (!_isRunning)
-                    throw new InvalidMatchException();
+                    throw new InvalidMatchException("Invalid match");
                 if (_activePlayers.Count >= GameConstants.MAX_PLAYERS)
-                    throw new InvalidPlayerException();
+                    throw new InvalidPlayerException("Max players reached");
                 if (IsDeadPlayer(character))
-                    throw new InvalidPlayerException();
+                    throw new InvalidPlayerException("Invalid player");
 
                 var p = GetEmptyCell();
 
@@ -163,7 +161,6 @@ namespace OblPR.Game
                 MovePlayerToCell(charHandler, p);
 
 
-                NotifyPlayerNear(p);
                 return charHandler;
             }
 
@@ -174,18 +171,20 @@ namespace OblPR.Game
             _board[p.X][p.Y] = charHandler;
             charHandler.Position.X = p.X;
             charHandler.Position.Y = p.Y;
+            NotifyPlayerNear(p, charHandler.Char);
         }
 
-        private void NotifyPlayerNear(Point p)
+        private void NotifyPlayerNear(Point p, Character character)
         {
             for (var i = -1; i <= 1; i++)
             {
                 for (var j = -1; j <= 1; j++)
                 {
                     if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < GameConstants.BOARD_SIZE)
+                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + j >= 0 && p.Y + j < GameConstants.BOARD_SIZE)
                     {
-                        _board[p.X + i][p.Y + j].Handler.NotifyPlayerNear();
+                        if (_board[p.X + i][p.Y + j] != null)
+                            _board[p.X + i][p.Y + j].Handler.NotifyPlayerNear(character.CharacterRole.ToString() + " near");
                     }
                 }
 
@@ -199,10 +198,10 @@ namespace OblPR.Game
                 for (var j = -1; j <= 1; j++)
                 {
                     if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < GameConstants.BOARD_SIZE)
+                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + j >= 0 && p.Y + j < GameConstants.BOARD_SIZE)
                     {
                         var handler = _board[p.X + i][p.Y + j];
-                        if ( handler!= null)
+                        if (handler != null)
                         {
                             handler.Char.Health -= ap;
                             if (handler.IsCharacterDead())
@@ -234,19 +233,15 @@ namespace OblPR.Game
                 }
                 x++;
             }
-            throw new NoCellAvailableException();
+            throw new NoCellAvailableException("Max Players Reached");
         }
 
 
         private bool IsDeadPlayer(Character character)
         {
             return _deadPlayers.Any(x => x.Nick.Equals(character.CurentPlayer.Nick));
-            
+
         }
 
-        public bool IsGameAvailable()
-        {
-            return this._isRunning;
-        }
     }
 }

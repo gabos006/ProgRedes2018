@@ -6,7 +6,7 @@ using OblPR.Data.Entities;
 
 namespace OblPR.Game
 {
-    public interface IGameServer
+    public interface IControlsProvider
     {
         ICharacterHandler JoinGame(IClientHandler handler, Character character);
     }

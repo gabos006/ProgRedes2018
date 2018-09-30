@@ -1,7 +1,7 @@
 ﻿
 namespace OblPR.Game
 {
-    public interface IGameController
+    public interface IGameLogic
     {
         void Attack(ICharacterHandler characterHandler);
         void PlayerExit(ICharacterHandler characterHandler, string result);

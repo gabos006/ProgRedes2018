@@ -7,19 +7,19 @@ using OblPR.Game;
 
 namespace OblPR.Game
 {
-    public class ClientListener:IClientHandler
+    public class ClientListener
     {
         private bool _isRuning;
         private Socket _server;
         private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
-        private readonly IGameServer _gameServer;
+        private readonly IControlsProvider _controlsProvider;
 
-        public ClientListener(IPlayerManager playerManager, ILoginManager loginManager, IGameServer gameServer)
+        public ClientListener(IPlayerManager playerManager, ILoginManager loginManager, IControlsProvider controlsProvider)
         {
             _playerManager = playerManager;
             _loginManager = loginManager;
-            _gameServer = gameServer;
+            _controlsProvider = controlsProvider;
         }
 
         public void StartListening(string ip, int port)
@@ -67,7 +67,7 @@ namespace OblPR.Game
         private void HandleClient(Socket socket)
         {
             
-            var client = new ClientHandler(_loginManager, _playerManager, _gameServer, socket);
+            var client = new ClientHandler(_loginManager, _playerManager, _controlsProvider, socket);
             client.Connect();
         }
 
@@ -76,18 +76,6 @@ namespace OblPR.Game
             if (!_isRuning) return;
             _server.Close();
             _isRuning = false;
-        }
-
-        public void NotifyPlayerNear()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        public void NotifyMatchEnd(string result)
-        {
-            throw new NotImplementedException();
         }
     }
 }

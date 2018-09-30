@@ -16,28 +16,29 @@ namespace OblPR.Game
 
 
 
-        private readonly IGameController _controller;
+        private readonly IGameLogic _logic;
 
-        public CharacterHandler(GameController gameController, IClientHandler handler, Character character)
+        public CharacterHandler(GameLogic gameLogic, IClientHandler handler, Character character)
         {
             this.Char = character;
             this.Handler = handler;
-            this._controller = gameController;
+            this.Position = new Point(0,0);
+            this._logic = gameLogic;
         }
 
         public void Attack()
         {
-            _controller.Attack(this);
+            _logic.Attack(this);
         }
 
         public void ExitMatch()
         {
-            _controller.PlayerExit(this, "Player exited");
+            _logic.PlayerExit(this, "Player exited");
         }
 
         public void Move(Point pos)
         {
-            _controller.MovePlayer(this, pos);
+            _logic.MovePlayer(this, pos);
         }
 
         public bool IsCharacterDead()

@@ -13,9 +13,10 @@
         public const int JOIN_GAME = 7;
         public const int MOVE = 8;
         public const int ATTACK = 9;
+        public const int PLAYER_NOTIFICATION = 10;
+        public const int MATCH_END = 11;
 
-        public const string MONSTER_ROL = "monster";
-        public const string SURVIVOR_ROL = "survivor";
+
 
     }
 }

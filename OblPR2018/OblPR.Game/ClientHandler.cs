@@ -8,32 +8,37 @@ using OblPR.Protocol;
 
 namespace OblPR.Game
 {
-    internal class ClientHandler:IClientHandler
+    internal class ClientHandler : IClientHandler
     {
         private readonly ILoginManager _loginManager;
         private readonly IPlayerManager _playerManager;
-        private readonly IGameServer _gameServer;
+        private readonly IControlsProvider _controlsProvider;
         private ICharacterHandler _characterHandler;
-
         private readonly Socket _socket;
+        private Thread _requestThread;
 
         private Player _player;
 
-        public ClientHandler(ILoginManager loginManager, IPlayerManager playerManager, IGameServer gameServer, Socket socket)
+        public ClientHandler(ILoginManager loginManager, IPlayerManager playerManager, IControlsProvider controlsProvider, Socket socket)
         {
             this._loginManager = loginManager;
             this._playerManager = playerManager;
-            this._gameServer = gameServer;
+            this._controlsProvider = controlsProvider;
             this._socket = socket;
         }
 
         public void Connect()
         {
             HandleClientLogin();
-            HandleCharacterSelection();
-            var requestThread = new Thread(HandleGameCommands);
-            requestThread.Start();
+            HandleGameStart();
 
+        }
+
+        private void HandleGameStart()
+        {
+            HandleCharacterSelection();
+            _requestThread = new Thread(HandleGameCommands);
+            _requestThread.Start();
         }
 
         private void HandleCharacterSelection()
@@ -48,19 +53,19 @@ namespace OblPR.Game
                     {
                         try
                         {
-                            var role = (Role) int.Parse(pmessage.Parameters[0].Value);
+                            var role = (Role)int.Parse(pmessage.Parameters[0].Value);
                             var character = new Character(_player, role);
-                            _characterHandler = _gameServer.JoinGame(this, character);
+                            _characterHandler = _controlsProvider.JoinGame(this, character);
 
                             var param = new ProtocolParameter("message", "Joined Successfully");
-                            var ok = new ProtocolMessage {Command = Command.OK};
+                            var ok = new ProtocolMessage { Command = Command.OK };
                             ok.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(ok));
                         }
                         catch (GameException e)
                         {
                             var param = new ProtocolParameter("message", e.Message);
-                            var error = new ProtocolMessage {Command = Command.ERROR};
+                            var error = new ProtocolMessage { Command = Command.ERROR };
                             error.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(error));
                         }
@@ -81,15 +86,62 @@ namespace OblPR.Game
                 _loginManager.Logout(_player.Nick);
             if (ClientConnected())
                 _socket.Close();
+            _characterHandler?.ExitMatch();
         }
 
         private void HandleGameCommands()
         {
-            while (ClientConnected())
+            while (ClientConnected() && _characterHandler != null)
             {
                 try
                 {
                     var message = MessageHandler.RecieveMessage(_socket);
+                    var pmessage = message.PMessage;
+
+                    if (pmessage.Command.Equals(Command.MOVE))
+                    {
+                        try
+                        {
+                            var x = int.Parse(pmessage.Parameters[0].Value);
+                            var y = int.Parse(pmessage.Parameters[1].Value);
+                            _characterHandler.Move(new Point(x, y));
+
+                            var param = new ProtocolParameter("message", "Moved OK");
+                            var protoMessage = new ProtocolMessage { Command = Command.OK };
+                            protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                        }
+                        catch (GameException e)
+                        {
+                            var param = new ProtocolParameter("message", e.Message);
+                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
+                            protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                        }
+
+                    }
+
+
+                    if (pmessage.Command.Equals(Command.ATTACK))
+                    {
+                        try
+                        {
+
+                            _characterHandler.Attack();
+
+                            var param = new ProtocolParameter("message", "Attack OK");
+                            var protoMessage = new ProtocolMessage { Command = Command.OK };
+                            protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                        }
+                        catch (GameException e)
+                        {
+                            var param = new ProtocolParameter("message", e.Message);
+                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
+                            protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                        }
+                    }
                 }
                 catch (SocketException)
                 {
@@ -107,32 +159,29 @@ namespace OblPR.Game
                 {
                     var recieved = MessageHandler.RecieveMessage(_socket);
                     var pmessage = recieved.PMessage;
-                    if (pmessage.Command.Equals(Command.LOGIN));
+                    if (pmessage.Command.Equals(Command.LOGIN)) ;
                     {
                         try
                         {
                             _player = _loginManager.Login(pmessage.Parameters[0].Value);
 
                             var param = new ProtocolParameter("message", "LoggedIn");
-                            var protoMessage = new ProtocolMessage();
-                            protoMessage.Command = Command.OK;
+                            var protoMessage = new ProtocolMessage { Command = Command.OK };
                             protoMessage.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(protoMessage));
                         }
-                        catch (PlayerNotFoundException)
+                        catch (PlayerNotFoundException e)
                         {
-                            var param = new ProtocolParameter("message", "PlayerNotFound");
-                            var protoMessage = new ProtocolMessage();
-                            protoMessage.Command = Command.ERROR;
+                            var param = new ProtocolParameter("message", e.Message);
+                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
                             protoMessage.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(protoMessage));
 
                         }
-                        catch (PlayerInUseException)
+                        catch (PlayerInUseException e)
                         {
-                            var param = new ProtocolParameter("message", "PlayerInUse");
-                            var protoMessage = new ProtocolMessage();
-                            protoMessage.Command = Command.ERROR;
+                            var param = new ProtocolParameter("message", e.Message);
+                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
                             protoMessage.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(protoMessage));
                         }
@@ -156,14 +205,43 @@ namespace OblPR.Game
             return _socket != null && _socket.Connected;
         }
 
-        public void NotifyPlayerNear()
+        public void NotifyPlayerNear(string result)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var param = new ProtocolParameter("message", "Player near!");
+                var protoMessage = new ProtocolMessage { Command = Command.PLAYER_NOTIFICATION };
+                protoMessage.Parameters.Add(param);
+                MessageHandler.SendMessage(_socket, new Message(protoMessage));
+            }
+            catch (SocketException e)
+            {
+                Disconnect();
+            }
+
         }
 
         public void NotifyMatchEnd(string result)
         {
-            throw new NotImplementedException();
+            this._characterHandler = null;
+            if (ClientConnected())
+            {
+                try
+                {
+                    var param = new ProtocolParameter("message", result);
+                    var protoMessage = new ProtocolMessage { Command = Command.MATCH_END };
+                    protoMessage.Parameters.Add(param);
+                    MessageHandler.SendMessage(_socket, new Message(protoMessage));
+
+
+
+                    HandleGameStart();
+                }
+                catch (SocketException e)
+                {
+                    Disconnect();
+                }
+            }
         }
     }
 }
