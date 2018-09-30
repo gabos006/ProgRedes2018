@@ -18,7 +18,6 @@ namespace OblPR.Client
                 switch (selectedOption)
                 {
                     case ClientCommand.CONNECT:
-
                         var connected = ConnectToServer();
                         if (connected)
                         {
@@ -30,7 +29,6 @@ namespace OblPR.Client
                                 switch (selectedOption)
                                 {
                                     case ClientCommand.LOGIN:
-
                                         var logged = clientConnected.Login();
 
                                         if (logged)
@@ -43,12 +41,10 @@ namespace OblPR.Client
                                                 switch (selectedOption)
                                                 {
                                                     case ClientCommand.DISCONNECT:
-
                                                         DisconnectFromServer();
                                                         break;
 
                                                     default: //Options like monster or survivor are the same
-
                                                         var joined = clientConnected.JoinGame(selectedOption);
                                                         if (joined)
                                                         {
@@ -59,6 +55,7 @@ namespace OblPR.Client
                                                             selectedOption = null;
                                                             while (clientConnected.ClientConnected() &&
                                                                    selectedOption != ClientCommand.EXIT_GAME &&
+                                                                   selectedOption != ClientCommand.DISCONNECT &&
                                                                    !clientConnected.match_end)
                                                             {
                                                                 PrintActiveGameMenu();
@@ -66,12 +63,10 @@ namespace OblPR.Client
                                                                 switch (selectedOption)
                                                                 {
                                                                     case ClientCommand.DISCONNECT:
-
                                                                         DisconnectFromServer();
                                                                         break;
 
                                                                     default:
-
                                                                         clientConnected.ActionGame(selectedOption);
                                                                         break;
                                                                 }
@@ -84,12 +79,10 @@ namespace OblPR.Client
                                         break;
 
                                     case ClientCommand.ADD_PLAYER:
-
                                         clientConnected.AddPlayer();
                                         break;
 
                                     case ClientCommand.DISCONNECT:
-
                                         DisconnectFromServer();
                                         break;
                                 }
@@ -128,7 +121,7 @@ namespace OblPR.Client
         private static void PrintConnectionMenu()
         {
             Console.WriteLine("\n*********************************************");
-            Console.WriteLine("* WELCOME TO SLASHER SIMULATION SYSTEM *");
+            Console.WriteLine("*   WELCOME TO SLASHER SIMULATION SYSTEM    *");
             Console.WriteLine("*********************************************");
             Console.WriteLine("1 - Connect to server");
             Console.WriteLine("0 - Disconnect from server\n");
