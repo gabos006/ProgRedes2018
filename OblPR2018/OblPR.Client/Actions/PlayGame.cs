@@ -39,6 +39,11 @@ namespace OblPR.Client
 
                         message.Command = Command.ATTACK;
                         break;
+
+                    case ClientCommand.EXIT_GAME:
+
+                        message.Command = Command.MATCH_END;
+                        break;
                 }
 
                 var payload = new Message(message);
