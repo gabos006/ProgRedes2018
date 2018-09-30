@@ -57,27 +57,22 @@ namespace OblPR.Client
                                                             thread.Start();
 
                                                             selectedOption = null;
-                                                            while (clientConnected.ClientConnected() && 
-                                                                   selectedOption != ClientCommand.DISCONNECT &&
+                                                            while (clientConnected.ClientConnected() &&
+                                                                   selectedOption != ClientCommand.EXIT_GAME &&
                                                                    !clientConnected.match_end)
                                                             {
                                                                 PrintActiveGameMenu();
-                                                                selectedOption = HandleMenuInput(2);
+                                                                selectedOption = HandleMenuInput(3);
                                                                 switch (selectedOption)
                                                                 {
                                                                     case ClientCommand.DISCONNECT:
-                                                                        
+
                                                                         DisconnectFromServer();
                                                                         break;
 
-                                                                    case ClientCommand.MOVE:
+                                                                    default:
 
-                                                                        clientConnected.Move(selectedOption);
-                                                                        break;
-
-                                                                    case ClientCommand.ATTACK:
-
-                                                                        clientConnected.Attack(selectedOption);
+                                                                        clientConnected.ActionGame(selectedOption);
                                                                         break;
                                                                 }
                                                             }
@@ -117,7 +112,7 @@ namespace OblPR.Client
             Console.WriteLine("*********************************************");
             Console.WriteLine("1 - Login");
             Console.WriteLine("2 - Add Player");
-            Console.WriteLine("0 - Exit\n");
+            Console.WriteLine("0 - Disconnect\n");
         }
 
         private static void PrintLoggedMenu()
@@ -127,7 +122,7 @@ namespace OblPR.Client
             Console.WriteLine("*********************************************");
             Console.WriteLine("1 - Connect like Monster");
             Console.WriteLine("2 - Connect like Survivor");
-            Console.WriteLine("0 - Exit\n");
+            Console.WriteLine("0 - Disconnect\n");
         }
 
         private static void PrintConnectionMenu()
@@ -146,7 +141,8 @@ namespace OblPR.Client
             Console.WriteLine("*********************************************");
             Console.WriteLine("1 - Move");
             Console.WriteLine("2 - Attack");
-            Console.WriteLine("0 - Exit\n");
+            Console.WriteLine("3 - Exit active game");
+            Console.WriteLine("0 - Disconnect\n");
         }
 
         private static int? HandleMenuInput(int options)

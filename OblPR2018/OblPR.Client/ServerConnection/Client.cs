@@ -60,13 +60,7 @@ namespace OblPR.Client
             addPlayer.DoAction(socket);
         }
 
-        public void Move(int? command)
-        {
-            IAction playGame = new PlayGame(command);
-            playGame.DoAction(socket);
-        }
-
-        public void Attack(int? command)
+        public void ActionGame(int? command)
         {
             IAction playGame = new PlayGame(command);
             playGame.DoAction(socket);
