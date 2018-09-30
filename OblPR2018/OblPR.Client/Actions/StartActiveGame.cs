@@ -26,10 +26,10 @@ namespace OblPR.Client
             switch (command)
             {
                 case ClientCommand.ACTIVE_GAME_MONSTER:
-                    parameter = new ProtocolParameter("rol", Command.MONSTER_ROL);
+                    parameter = new ProtocolParameter("rol", Constant.Monster);
                     break;
                 case ClientCommand.ACTIVE_GAME_SURVIVOR:
-                    parameter = new ProtocolParameter("rol", Command.SURVIVOR_ROL);
+                    parameter = new ProtocolParameter("rol", Constant.Survivor);
                     break;
             }
 

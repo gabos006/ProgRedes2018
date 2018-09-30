@@ -37,6 +37,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Role.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OblPR.Protocol\OblPR.Protocol.csproj">
