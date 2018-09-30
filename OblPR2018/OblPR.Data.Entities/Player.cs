@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OblPR.Data.Entities
+﻿namespace OblPR.Data.Entities
 {
     public class Player
     {
