@@ -30,19 +30,11 @@ namespace OblPR.Game
         public void Connect()
         {
             HandleClientLogin();
-            HandleClientJoinGame();
-            var requestThread = new Thread(ListenClientRequests);
+            var requestThread = new Thread(HandleClientRequests);
             requestThread.Start();
 
         }
 
-        private void HandleClientJoinGame()
-        {
-            while (ClientConnected() && _characterHandler == null)
-            {
-                
-            }
-        }
 
         private void Disconnect()
         {
@@ -53,7 +45,7 @@ namespace OblPR.Game
                 _socket.Close();
         }
 
-        private void ListenClientRequests()
+        private void HandleClientRequests()
         {
             while (ClientConnected())
             {
@@ -114,7 +106,6 @@ namespace OblPR.Game
                 }
 
             }
-            ListenClientRequests();
         }
 
         private bool LoggedIn()
