@@ -27,10 +27,10 @@ namespace OblPR.Game
 
         private void InitGameBoard()
         {
-            _board = new CharacterHandler[Constants.BOARD_SIZE][];
-            for (var i = 0; i < Constants.BOARD_SIZE; i++)
+            _board = new CharacterHandler[GameConstants.BOARD_SIZE][];
+            for (var i = 0; i < GameConstants.BOARD_SIZE; i++)
             {
-                _board[i] = new CharacterHandler[Constants.BOARD_SIZE];
+                _board[i] = new CharacterHandler[GameConstants.BOARD_SIZE];
             }
         }
 
@@ -50,7 +50,7 @@ namespace OblPR.Game
         private void StartTimer()
         {
             _timer = new System.Threading.Timer(
-                this.TimerEnd, null, Constants.MILISECONDS, Constants.MILISECONDS);
+                this.TimerEnd, null, GameConstants.MILISECONDS, GameConstants.MILISECONDS);
         }
 
         private void TimerEnd(object state)
@@ -110,7 +110,7 @@ namespace OblPR.Game
                 var handler = (CharacterHandler)characterHandler;
                 _board[handler.Position.X][handler.Position.Y] = null;
                 _activePlayers.Remove(handler);
-                handler.Notifier.NotifyMatchEnd(reason);
+                handler.Handler.NotifyMatchEnd(reason);
             }
         }
 
@@ -134,7 +134,7 @@ namespace OblPR.Game
         {
             var despX = Math.Abs(orig.X - dest.X);
             var despY = Math.Abs(orig.Y - dest.Y);
-            return orig.X >= 0 && orig.X < Constants.BOARD_SIZE && orig.Y >= 0 && orig.Y < Constants.BOARD_SIZE && despY + despX <= 2;
+            return orig.X >= 0 && orig.X < GameConstants.BOARD_SIZE && orig.Y >= 0 && orig.Y < GameConstants.BOARD_SIZE && despY + despX <= 2;
 
         }
 
@@ -143,14 +143,13 @@ namespace OblPR.Game
             return _board[p.X][p.Y] == null;
         }
 
-        public ICharacterHandler JoinGame(IClientNotifier notifier, Character character)
+        public ICharacterHandler JoinGame(IClientHandler handler, Character character)
         {
             lock (_actionLock)
             {
                 if (!_isRunning)
                     throw new InvalidMatchException();
-
-                if (_activePlayers.Count >= Constants.MAX_PLAYERS)
+                if (_activePlayers.Count >= GameConstants.MAX_PLAYERS)
                     throw new InvalidPlayerException();
                 if (IsDeadPlayer(character))
                     throw new InvalidPlayerException();
@@ -158,7 +157,7 @@ namespace OblPR.Game
                 var p = GetEmptyCell();
 
 
-                var charHandler = new CharacterHandler(this, notifier, character);
+                var charHandler = new CharacterHandler(this, handler, character);
                 _activePlayers.Add(charHandler);
 
                 MovePlayerToCell(charHandler, p);
@@ -184,9 +183,9 @@ namespace OblPR.Game
                 for (var j = -1; j <= 1; j++)
                 {
                     if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < Constants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < Constants.BOARD_SIZE)
+                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < GameConstants.BOARD_SIZE)
                     {
-                        _board[p.X + i][p.Y + j].Notifier.NotifyPlayerNear();
+                        _board[p.X + i][p.Y + j].Handler.NotifyPlayerNear();
                     }
                 }
 
@@ -200,7 +199,7 @@ namespace OblPR.Game
                 for (var j = -1; j <= 1; j++)
                 {
                     if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < Constants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < Constants.BOARD_SIZE)
+                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + i >= 0 && p.Y + i < GameConstants.BOARD_SIZE)
                     {
                         var handler = _board[p.X + i][p.Y + j];
                         if ( handler!= null)
@@ -223,9 +222,9 @@ namespace OblPR.Game
         {
             int x = 0;
             int y = 0;
-            while (x < Constants.BOARD_SIZE)
+            while (x < GameConstants.BOARD_SIZE)
             {
-                while (y < Constants.BOARD_SIZE)
+                while (y < GameConstants.BOARD_SIZE)
                 {
                     if (_board[x][y] == null)
                     {

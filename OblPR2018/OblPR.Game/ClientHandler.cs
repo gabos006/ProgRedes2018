@@ -8,7 +8,7 @@ using OblPR.Protocol;
 
 namespace OblPR.Game
 {
-    internal class ClientHandler
+    internal class ClientHandler:IClientHandler
     {
         private readonly ILoginManager _loginManager;
         private readonly IPlayerManager _playerManager;
@@ -30,11 +30,49 @@ namespace OblPR.Game
         public void Connect()
         {
             HandleClientLogin();
-            var requestThread = new Thread(HandleClientRequests);
+            HandleCharacterSelection();
+            var requestThread = new Thread(HandleGameCommands);
             requestThread.Start();
 
         }
 
+        private void HandleCharacterSelection()
+        {
+            while (ClientConnected() && _characterHandler == null)
+            {
+                try
+                {
+                    var recieved = MessageHandler.RecieveMessage(_socket);
+                    var pmessage = recieved.PMessage;
+                    if (pmessage.Command.Equals(Command.JOIN_GAME))
+                    {
+                        try
+                        {
+                            var role = (Role) int.Parse(pmessage.Parameters[0].Value);
+                            var character = new Character(_player, role);
+                            _characterHandler = _gameServer.JoinGame(this, character);
+
+                            var param = new ProtocolParameter("message", "Joined Successfully");
+                            var ok = new ProtocolMessage {Command = Command.OK};
+                            ok.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(ok));
+                        }
+                        catch (GameException e)
+                        {
+                            var param = new ProtocolParameter("message", e.Message);
+                            var error = new ProtocolMessage {Command = Command.ERROR};
+                            error.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(error));
+                        }
+                    }
+
+                }
+                catch (SocketException)
+                {
+                    Disconnect();
+                }
+            }
+        }
 
         private void Disconnect()
         {
@@ -45,7 +83,7 @@ namespace OblPR.Game
                 _socket.Close();
         }
 
-        private void HandleClientRequests()
+        private void HandleGameCommands()
         {
             while (ClientConnected())
             {
@@ -116,6 +154,16 @@ namespace OblPR.Game
         private bool ClientConnected()
         {
             return _socket != null && _socket.Connected;
+        }
+
+        public void NotifyPlayerNear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyMatchEnd(string result)
+        {
+            throw new NotImplementedException();
         }
     }
 }

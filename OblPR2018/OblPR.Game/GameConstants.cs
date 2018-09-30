@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OblPR.Game
 {
-     public static class Constants
+     public static class GameConstants
     {
         public const int BOARD_SIZE = 8;
         public const int MAX_PLAYERS = 8;

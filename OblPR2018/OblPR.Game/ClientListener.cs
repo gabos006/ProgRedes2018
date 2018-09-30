@@ -7,7 +7,7 @@ using OblPR.Game;
 
 namespace OblPR.Game
 {
-    public class ClientListener:IClientNotifier
+    public class ClientListener:IClientHandler
     {
         private bool _isRuning;
         private Socket _server;

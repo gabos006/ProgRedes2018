@@ -8,7 +8,6 @@ namespace OblPR.Game
 {
     public interface IGameServer
     {
-        ICharacterHandler JoinGame(IClientNotifier notifier, Character character);
-        bool IsGameAvailable();
+        ICharacterHandler JoinGame(IClientHandler handler, Character character);
     }
 }

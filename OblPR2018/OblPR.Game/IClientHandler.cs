@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OblPR.Game
 {
-    public interface IClientNotifier
+    public interface IClientHandler
     {
         void NotifyPlayerNear();
         void NotifyMatchEnd(string result);

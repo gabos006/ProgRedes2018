@@ -2,7 +2,8 @@
 {
     public static class Constant
     {
-        public const string Monster = "monster";
-        public const string Survivor = "survivor";
+        public const string Survivor = "0";
+        public const string Monster = "1";
+
     }
 }

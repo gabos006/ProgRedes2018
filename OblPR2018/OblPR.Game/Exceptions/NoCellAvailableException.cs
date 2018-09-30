@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace OblPR.Game
 {
     [Serializable]
-    internal class NoCellAvailableException : Exception
+    internal class NoCellAvailableException : GameException
     {
         public NoCellAvailableException()
         {

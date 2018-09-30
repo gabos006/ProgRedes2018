@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace OblPR.Game
 {
     [Serializable]
-    internal class InvalidMoveException : Exception
+    internal class InvalidMoveException : GameException
     {
         public InvalidMoveException()
         {

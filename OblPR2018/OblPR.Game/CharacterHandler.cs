@@ -11,17 +11,17 @@ namespace OblPR.Game
     {
         public Point Position { get; }
         public Character Char { get; }
-        public IClientNotifier Notifier { get; }
+        public IClientHandler Handler { get; }
 
 
 
 
         private readonly IGameController _controller;
 
-        public CharacterHandler(GameController gameController, IClientNotifier notifier, Character character)
+        public CharacterHandler(GameController gameController, IClientHandler handler, Character character)
         {
             this.Char = character;
-            this.Notifier = notifier;
+            this.Handler = handler;
             this._controller = gameController;
         }
 
