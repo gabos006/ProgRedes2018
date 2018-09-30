@@ -10,17 +10,32 @@ namespace OblPR.GameImpl
 {
     public class CharacterHandler : ICharacterHandler
     {
-        public int CoordX { get; set; }
-        public int CoordY { get; set; }
+        public Point Position { get; set; }
+
+        public int Health
+        {
+            get { return _character.Health; }
+            set { _character.Health = value; }
+        }
+
+
+        public int Ap { get { return _character.AP; } }
+
+        public Player Player
+        {
+            get { return _character.CurentPlayer; }
+        }
+
+        public IClientNotifier Notifier { get; private set; }
+
 
         private readonly IGameController _controller;
-        private readonly IClientNotifier _notifier;
         private readonly AbstractCharacter _character;
 
         public CharacterHandler(GameController gameController, IClientNotifier notifier, AbstractCharacter character)
         {
+            this.Notifier = notifier;
             this._controller = gameController;
-            this._notifier = notifier;
             this._character = character;
         }
 
@@ -34,9 +49,19 @@ namespace OblPR.GameImpl
             _controller.PlayerExit(this);
         }
 
-        public void Move(int x, int y)
+        public void Move(Point pos)
         {
-            _controller.MovePlayer(this, x, y);
+            _controller.MovePlayer(this, pos);
         }
+
+        public bool IsCharacterDead()
+        {
+            return Health <= 0;
+        }
+
+
+
+
+
     }
 }

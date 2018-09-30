@@ -13,5 +13,8 @@ namespace OblPR.Data.Entities
         {
             CurentPlayer = player;
         }
+
+        public abstract int Health { get; set; }
+        public abstract int AP { get;  }
     }
 }

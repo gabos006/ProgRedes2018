@@ -9,6 +9,11 @@ namespace OblPR.Data.Entities
     {
         public Survivor(Player player) : base(player)
         {
+            Health = 20;
+            AP = 5;
         }
+
+        public override int Health { get; set; }
+        public override int AP { get; }
     }
 }

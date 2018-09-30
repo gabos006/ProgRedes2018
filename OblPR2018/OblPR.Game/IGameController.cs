@@ -5,6 +5,6 @@ namespace OblPR.Game
     {
         void Attack(ICharacterHandler characterHandler);
         void PlayerExit(ICharacterHandler characterHandler);
-        void MovePlayer(ICharacterHandler characterHandler, int x, int y);
+        void MovePlayer(ICharacterHandler characterHandler, Point position);
     }
 }

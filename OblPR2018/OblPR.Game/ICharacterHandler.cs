@@ -9,7 +9,7 @@ namespace OblPR.Game
     {
         void ExitMatch();
         void Attack();
-        void Move(int x, int y);
+        void Move(Point position);
 
     }
 }
