@@ -65,10 +65,6 @@
       <Project>{4553CEEF-F072-48C8-9E16-E2A8B968DB70}</Project>
       <Name>OblPR.Protocol</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OblPR.Server\OblPR.Server.csproj">
-      <Project>{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}</Project>
-      <Name>OblPR.Server</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

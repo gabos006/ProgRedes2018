@@ -5,7 +5,7 @@ using System.Threading;
 using OblPR.Data.Services;
 using OblPR.Game;
 
-namespace OblPR.Server
+namespace OblPR.Game
 {
     public class ClientListener:IClientNotifier
     {

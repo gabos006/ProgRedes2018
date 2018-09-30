@@ -7,15 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Data.Entities", "OblP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Data.Services", "OblPR.Data.Services\OblPR.Data.Services.csproj", "{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Server", "OblPR.Server\OblPR.Server.csproj", "{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Game", "OblPR.Game\OblPR.Game.csproj", "{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Protocol", "OblPR.Protocol\OblPR.Protocol.csproj", "{4553CEEF-F072-48C8-9E16-E2A8B968DB70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Client", "OblPR.Client\OblPR.Client.csproj", "{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.GameImpl", "OblPR.GameImpl\OblPR.GameImpl.csproj", "{072D73B0-CD3E-4953-ABA6-333FB6CEE150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +27,6 @@ Global
 		{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCE78095-1EF5-49B6-A0F1-8B2BCFB7F919}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B79B7C5-F13B-4D3A-83E8-C42F369F125B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{158B2DE0-1624-4EE6-9B3F-7E1404AE829D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,10 +39,6 @@ Global
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{072D73B0-CD3E-4953-ABA6-333FB6CEE150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{072D73B0-CD3E-4953-ABA6-333FB6CEE150}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{072D73B0-CD3E-4953-ABA6-333FB6CEE150}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{072D73B0-CD3E-4953-ABA6-333FB6CEE150}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

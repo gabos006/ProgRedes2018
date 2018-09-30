@@ -2,11 +2,11 @@
 using System.Net.Sockets;
 using System.Threading;
 using OblPR.Data.Entities;
-using OblPR.Data.Services;
 using OblPR.Game;
+using OblPR.Data.Services;
 using OblPR.Protocol;
 
-namespace OblPR.Server
+namespace OblPR.Game
 {
     internal class ClientHandler
     {

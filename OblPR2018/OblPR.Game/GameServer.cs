@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using OblPR.Data.Services;
 using OblPR.Game;
 
-namespace OblPR.GameImpl
+namespace OblPR.Game
 {
     public class GameServer
     {
