@@ -75,6 +75,20 @@ namespace OblPR.Client
             IAction startActiveGame = new StartActiveGame(command);
             return startActiveGame.DoAction(socket);
         }
+
+        public void ListenServerResponse()
+        {
+            ServerResponse response = new ServerResponse();
+            while (true)
+            {
+                var resp = response.RecieveResponse(socket);
+            }
+        }
+
+        public bool ClientConnected()
+        {
+            return socket != null && socket.Connected;
+        }
     }
 }
 
