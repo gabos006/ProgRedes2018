@@ -1,4 +1,6 @@
-﻿namespace OblPR.Data.Entities
+﻿using System;
+
+namespace OblPR.Data.Entities
 {
     public class Character
     {
@@ -41,6 +43,17 @@
             if (CharacterRole == Role.Survivor)
                 return 5;
             return 0;
+        }
+
+        public void Attack(Character defender)
+        {
+            if (CharacterRole == Role.Monster)
+                defender.Health -= this.Ap;
+            if (CharacterRole == Role.Survivor)
+            {
+                if (defender.CharacterRole == Role.Monster)
+                    defender.Health -= this.Ap;
+            }
         }
     }
 }

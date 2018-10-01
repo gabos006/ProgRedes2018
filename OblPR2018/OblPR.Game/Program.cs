@@ -15,7 +15,7 @@ namespace OblPR.Game
             ILoginManager loginManager = new LoginManager(data);
 
             var gameServer = new GameServer(playerManager, loginManager);
-            gameServer.StartServer("192.168.1.110", 4000);
+            gameServer.StartServer("127.0.0.1", 4000);
         }
     }
 }

@@ -31,61 +31,81 @@ namespace OblPR.Game
         public void Connect()
         {
             HandleClientLogin();
-            HandleGameStart();
-
+            _requestThread =  new Thread(ListenClientRequests);
+            _requestThread.Start();
         }
 
-        private void HandleGameStart()
+        private void ListenClientRequests()
         {
-
-
-            HandleCharacterSelection();
-            if (ClientConnected() && HasGameControls())
-            {
-                _requestThread = new Thread(HandleGameCommands);
-                _requestThread.Start();
-            }
-
-
-
-        }
-
-        private bool HasGameControls()
-        {
-            return _characterHandler != null;
-        }
-
-        private void HandleCharacterSelection()
-        {
-            while (ClientConnected() && !HasGameControls())
+            while (ClientConnected())
             {
                 try
                 {
-                    var recieved = MessageHandler.RecieveMessage(_socket);
-                    var pmessage = recieved.PMessage;
-                    if (pmessage.Command.Equals(Command.JOIN_GAME))
+                    while (!HasGameControls())
                     {
-                        try
+                        var recieved = MessageHandler.RecieveMessage(_socket);
+                        var pmessage = recieved.PMessage;
+                        if (pmessage.Command.Equals(Command.JOIN_GAME))
                         {
-                            var role = (Role)int.Parse(pmessage.Parameters[0].Value);
-                            var character = new Character(_player, role);
-                            _characterHandler = _controlsProvider.JoinGame(this, character);
+                            try
+                            {
+                                var role = (Role) int.Parse(pmessage.Parameters[0].Value);
+                                var character = new Character(_player, role);
 
-                            var param = new ProtocolParameter("message", "Joined Successfully");
-                            var ok = new ProtocolMessage { Command = Command.OK };
-                            ok.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(ok));
-                        }
-                        catch (GameException e)
-                        {
-                            var param = new ProtocolParameter("message", e.Message);
-                            var error = new ProtocolMessage { Command = Command.ERROR };
-                            error.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(error));
+                                _characterHandler = _controlsProvider.JoinGame(this, character);
+
+                                var param = new ProtocolParameter("message", "Joined Successfully");
+                                var ok = new ProtocolMessage {Command = Command.OK};
+                                ok.Parameters.Add(param);
+                                MessageHandler.SendMessage(_socket, new Message(ok));
+                            }
+                            catch (GameException e)
+                            {
+                                var param = new ProtocolParameter("message", e.Message);
+                                var error = new ProtocolMessage {Command = Command.ERROR};
+                                error.Parameters.Add(param);
+                                MessageHandler.SendMessage(_socket, new Message(error));
+                            }
                         }
                     }
 
+                    while (HasGameControls())
+                    {
+                        var recieved = MessageHandler.RecieveMessage(_socket);
+                        var pmessage = recieved.PMessage;
+
+                        if (pmessage.Command.Equals(Command.LOGIN))
+                        {
+                            try
+                            {
+                                _player = _loginManager.Login(pmessage.Parameters[0].Value);
+
+                                var param = new ProtocolParameter("message", "LoggedIn");
+                                var protoMessage = new ProtocolMessage { Command = Command.OK };
+                                protoMessage.Parameters.Add(param);
+                                MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                            }
+                            catch (PlayerNotFoundException e)
+                            {
+                                var param = new ProtocolParameter("message", e.Message);
+                                var protoMessage = new ProtocolMessage { Command = Command.ERROR };
+                                protoMessage.Parameters.Add(param);
+                                MessageHandler.SendMessage(_socket, new Message(protoMessage));
+
+                            }
+                            catch (PlayerInUseException e)
+                            {
+                                var param = new ProtocolParameter("message", e.Message);
+                                var protoMessage = new ProtocolMessage { Command = Command.ERROR };
+                                protoMessage.Parameters.Add(param);
+                                MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                            }
+                        }
+                    }
+
+
                 }
+
                 catch (SocketException)
                 {
                     Disconnect();
@@ -93,79 +113,6 @@ namespace OblPR.Game
             }
         }
 
-        private void Disconnect()
-        {
-            if (HasGameControls())
-                _characterHandler.ExitMatch();
-            if (LoggedIn())
-                _loginManager.Logout(_player.Nick);
-            if (ClientConnected())
-                _socket.Close();
-        }
-
-        private void HandleGameCommands()
-        {
-            while (ClientConnected() && HasGameControls())
-            {
-                try
-                {
-                    var message = MessageHandler.RecieveMessage(_socket);
-                    var pmessage = message.PMessage;
-
-                    if (pmessage.Command.Equals(Command.MOVE))
-                    {
-                        try
-                        {
-                            var x = int.Parse(pmessage.Parameters[0].Value);
-                            var y = int.Parse(pmessage.Parameters[1].Value);
-                            _characterHandler.Move(new Point(x, y));
-
-                            var param = new ProtocolParameter("message", "Moved OK");
-                            var protoMessage = new ProtocolMessage { Command = Command.OK };
-                            protoMessage.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
-                        }
-                        catch (GameException e)
-                        {
-                            var param = new ProtocolParameter("message", e.Message);
-                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
-                            protoMessage.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
-                        }
-
-                    }
-
-
-                    if (pmessage.Command.Equals(Command.ATTACK))
-                    {
-                        try
-                        {
-
-                            _characterHandler.Attack();
-
-                            var param = new ProtocolParameter("message", "Attack OK");
-                            var protoMessage = new ProtocolMessage { Command = Command.OK };
-                            protoMessage.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
-                        }
-                        catch (GameException e)
-                        {
-                            var param = new ProtocolParameter("message", e.Message);
-                            var protoMessage = new ProtocolMessage { Command = Command.ERROR };
-                            protoMessage.Parameters.Add(param);
-                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
-                        }
-                    }
-                }
-                catch (SocketException)
-                {
-
-                    Disconnect();
-
-                }
-            }
-
-        }
 
         private void HandleClientLogin()
         {
@@ -175,7 +122,7 @@ namespace OblPR.Game
                 {
                     var recieved = MessageHandler.RecieveMessage(_socket);
                     var pmessage = recieved.PMessage;
-                    if (pmessage.Command.Equals(Command.LOGIN)) ;
+                    if (pmessage.Command.Equals(Command.LOGIN)) 
                     {
                         try
                         {
@@ -211,15 +158,7 @@ namespace OblPR.Game
             }
         }
 
-        private bool LoggedIn()
-        {
-            return _player != null;
-        }
 
-        private bool ClientConnected()
-        {
-            return _socket != null && _socket.Connected;
-        }
 
         public void NotifyPlayerNear(string result)
         {
@@ -242,7 +181,7 @@ namespace OblPR.Game
 
         public void NotifyMatchEnd(string result)
         {
-            _characterHandler = null;
+            RemoveGameControls();
 
             if (ClientConnected())
             {
@@ -262,5 +201,37 @@ namespace OblPR.Game
 
 
         }
+
+        private void RemoveGameControls()
+        {
+            _characterHandler = null;
+        }
+
+
+        private bool HasGameControls()
+        {
+            return _characterHandler != null;
+        }
+
+        private void Disconnect()
+        {
+            if (HasGameControls())
+                RemoveGameControls();
+            if (LoggedIn())
+                _loginManager.Logout(_player.Nick);
+            if (ClientConnected())
+                _socket.Close();
+        }
+
+        private bool LoggedIn()
+        {
+            return _player != null;
+        }
+
+        private bool ClientConnected()
+        {
+            return _socket != null && _socket.Connected;
+        }
+
     }
 }

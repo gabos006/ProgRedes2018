@@ -42,7 +42,34 @@ namespace OblPR.Game
             _activePlayers.Clear();
             _isRunning = true;
             StartTimer();
-            while (_isRunning) { }
+
+            Console.Clear();
+            Console.CursorVisible = false;
+
+            while (_isRunning)
+            {
+                Console.SetCursorPosition(0, 0);
+                for (var i = 0; i < GameConstants.BOARD_SIZE; i++)
+                {
+                    string line = "";
+
+                    for (var j = 0; j < GameConstants.BOARD_SIZE; j++)
+                    {
+                        var cell = _board[i][j];
+                        if (cell == null)
+                            line += " X ";
+                        if (cell != null)
+                        {
+                            if (cell.Char.CharacterRole == Role.Monster)
+                                line += " M ";
+                            if (cell.Char.CharacterRole == Role.Survivor)
+                                line += " S ";
+                        }
+                    }
+                    Console.WriteLine(line);
+                }
+            }
+            Console.CursorVisible = true;
         }
 
         private void StartTimer()
@@ -64,6 +91,8 @@ namespace OblPR.Game
             var survivors = _activePlayers.Count(x => x.Char.CharacterRole.Equals(Role.Survivor));
             var monsters = _activePlayers.Count(x => x.Char.CharacterRole.Equals(Role.Monster));
 
+            var auxiliarList = _activePlayers.ToList();
+
             if (survivors == 0 && monsters == 0)
             {
                 //no gana nadie
@@ -72,7 +101,7 @@ namespace OblPR.Game
 
             if (survivors == 0 && monsters > 0)
             {
-                foreach (var handler in _activePlayers)
+                foreach (var handler in auxiliarList)
                 {
                     PlayerExit(handler, "monsters win");
                 }
@@ -82,14 +111,12 @@ namespace OblPR.Game
 
             if (survivors > 0)
             {
-                var handlers = _activePlayers.ToList().GetEnumerator();
 
-                while (handlers.MoveNext())
+                foreach (var handler in auxiliarList)
                 {
-                    PlayerExit(handlers.Current, "surivors win");
-
+                    PlayerExit(handler, "surivors win");
                 }
-                return;
+
             }
 
         }
@@ -100,7 +127,7 @@ namespace OblPR.Game
             {
                 var handler = (CharacterHandler)characterHandler;
                 var ap = handler.Char.Ap;
-                AttackNearbyPlayers(handler.Position, handler.Char.Ap);
+                AttackNearbyPlayers(handler.Position, handler.Char);
             }
         }
 
@@ -194,7 +221,7 @@ namespace OblPR.Game
             }
         }
 
-        private void AttackNearbyPlayers(Point p, int ap)
+        private void AttackNearbyPlayers(Point p, Character attacker)
         {
             for (var i = -1; i <= 1; i++)
             {
@@ -206,7 +233,8 @@ namespace OblPR.Game
                         var handler = _board[p.X + i][p.Y + j];
                         if (handler != null)
                         {
-                            handler.Char.Health -= ap;
+                            attacker.Attack(handler.Char);
+
                             if (handler.IsCharacterDead())
                             {
                                 _deadPlayers.Add(handler.Char.CurentPlayer);
@@ -218,7 +246,6 @@ namespace OblPR.Game
 
             }
         }
-
 
         private Point GetEmptyCell()
         {
