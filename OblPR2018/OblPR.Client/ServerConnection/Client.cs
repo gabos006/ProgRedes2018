@@ -74,7 +74,8 @@ namespace OblPR.Client
 
         public void ListenServerGameResponse()
         {
-            while (ClientConnected())
+            var isRunning = true;
+            while (ClientConnected() && isRunning)
             {
                 try
                 {
@@ -103,6 +104,7 @@ namespace OblPR.Client
                 }
                 catch (SocketException)
                 {
+                    isRunning = false;
                     Console.WriteLine("The server is down!!");
                 }
             }

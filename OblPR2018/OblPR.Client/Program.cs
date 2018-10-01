@@ -183,8 +183,8 @@ namespace OblPR.Client
             //Console.Write("Insert client port: ");
             //var CLIENT_PORT = int.Parse(Console.ReadLine().Trim());
 
-            var CLIENT_IP = "127.0.0.1";
-            var SERVER_IP = "127.0.0.1";
+            var CLIENT_IP = "192.168.43.134";
+            var SERVER_IP = "192.168.43.247";
             var CLIENT_PORT = 5000;
             var SERVER_PORT = 4000;
 
