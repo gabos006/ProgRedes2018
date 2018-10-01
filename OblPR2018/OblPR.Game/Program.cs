@@ -1,8 +1,6 @@
 ﻿using OblPR.Data.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+
 
 namespace OblPR.Game
 {
@@ -10,12 +8,16 @@ namespace OblPR.Game
     {
         static void Main(string[] args)
         {
+            string ip = ConfigurationManager.AppSettings["serverIp"];
+            string port = ConfigurationManager.AppSettings["serverPort"];
+
             var data = new PlayerData();
             IPlayerManager playerManager = new PlayerManager(data);
             ILoginManager loginManager = new LoginManager(data);
 
             var gameServer = new GameServer(playerManager, loginManager);
-            gameServer.StartServer("127.0.0.1", 4000);
+
+            gameServer.StartServer(ip, int.Parse(port));
         }
     }
 }

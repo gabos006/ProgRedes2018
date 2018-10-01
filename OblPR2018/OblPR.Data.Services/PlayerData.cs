@@ -14,8 +14,8 @@ namespace OblPR.Data.Services
             ActivePlayers = new List<Player>();
             RegisteredPlayers = new List<Player>();
 
-            RegisteredPlayers.Add(new Player("Dario"));
-            RegisteredPlayers.Add(new Player("Gabriel"));
+            RegisteredPlayers.Add(new Player("Dario", null));
+            RegisteredPlayers.Add(new Player("Gabriel", null));
 
         }
 

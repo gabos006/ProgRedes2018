@@ -66,6 +66,8 @@ namespace OblPR.Game
                                 line += " S ";
                         }
                     }
+                    Console.WriteLine("");
+
                     Console.WriteLine(line);
                 }
             }
@@ -198,10 +200,17 @@ namespace OblPR.Game
 
         private void MovePlayerToCell(CharacterHandler charHandler, Point p)
         {
-            _board[p.X][p.Y] = charHandler;
+            var x = charHandler.Position.X;
+            var y = charHandler.Position.Y;
             charHandler.Position.X = p.X;
             charHandler.Position.Y = p.Y;
+
+            _board[p.X][p.Y] = charHandler;
+
+            if (x >= 0 && y >= 0)
+                _board[x][y] = null;
             NotifyPlayerNear(p, charHandler.Char);
+
         }
 
         private void NotifyPlayerNear(Point p, Character character)

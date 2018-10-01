@@ -22,7 +22,7 @@ namespace OblPR.Game
         {
             this.Char = character;
             this.Handler = handler;
-            this.Position = new Point(0,0);
+            this.Position = new Point(-1,-1);
             this._logic = gameLogic;
         }
 
@@ -33,7 +33,7 @@ namespace OblPR.Game
 
         public void ExitMatch()
         {
-            _logic.PlayerExit(this, "Player exited");
+            _logic.PlayerExit(this, "Player done");
         }
 
         public void Move(Point pos)

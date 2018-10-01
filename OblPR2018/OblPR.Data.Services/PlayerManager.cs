@@ -22,7 +22,7 @@ namespace OblPR.Data.Services
             lock (Locker)
             {
                 if (_playerData.RegisteredPlayers.Any(x => x.Nick.Equals(player.Nick)))
-                    throw new PlayerExistsException();
+                    throw new PlayerExistsException("Player exists");
                 _playerData.RegisteredPlayers.Add(player);
             }
         }
