@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OblPR.Data.Entities;
+﻿using OblPR.Data.Entities;
 
 namespace OblPR.Data.Services
 {
