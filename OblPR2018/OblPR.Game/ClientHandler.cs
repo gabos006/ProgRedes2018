@@ -129,6 +129,14 @@ namespace OblPR.Game
                             _characterHandler.ExitMatch();
                         }
 
+                        if (pmessage.Command.Equals(Command.LOGOUT))
+                        {
+                            var param = new ProtocolParameter("message", "Logged out");
+                            var protoMessage = new ProtocolMessage { Command = Command.OK };
+                            protoMessage.Parameters.Add(param);
+                            MessageHandler.SendMessage(_socket, new Message(protoMessage));
+                            Disconnect();
+                        }
 
                     }
                 }
