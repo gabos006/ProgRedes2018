@@ -12,7 +12,7 @@
         }
 
         public string Nick { get; }
-        public string Image { get; }
+        public string Image { get; } = "";
 
 
         public override string ToString()
