@@ -22,17 +22,14 @@ namespace OblPR.Client
                 switch (command)
                 {
                     case ClientCommand.MOVE:
-
-                        Console.Write("Insert coordinate x: ");
-                        var x = Console.ReadLine().Trim();
-                        Console.Write("Insert coordinate y: ");
-                        var y = Console.ReadLine().Trim();
                         message.Command = Command.MOVE;
-                        var coordinateX = new ProtocolParameter("x", x);
-                        message.Parameters.Add(coordinateX);
-                        var coordinateY = new ProtocolParameter("y", y);
-                        message.Parameters.Add(coordinateY);
+                        Console.Write("Insert coordinate x: ");
+                        var coordinateX = new ProtocolParameter("x", HandleInput());
+                        Console.Write("Insert coordinate y: ");
+                        var coordinateY = new ProtocolParameter("y", HandleInput());
 
+                        message.Parameters.Add(coordinateX);
+                        message.Parameters.Add(coordinateY);
                         break;
 
                     case ClientCommand.ATTACK:
@@ -55,6 +52,25 @@ namespace OblPR.Client
                 Console.WriteLine("The server is down!!");
                 return false;
             }
+        }
+
+        private string HandleInput()
+        {
+            var isOptionValid = false;
+            while (!isOptionValid)
+            {
+                try
+                {
+                    var input = int.Parse(Console.ReadLine().Trim());
+                    return input.ToString();
+                }
+                catch
+                {
+                    isOptionValid = false;
+                    Console.WriteLine("Input has to be a number");
+                }
+            }
+            return null;
         }
     }
 }
