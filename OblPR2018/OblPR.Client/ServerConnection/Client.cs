@@ -54,6 +54,12 @@ namespace OblPR.Client
             return login.DoAction(socket);
         }
 
+        public bool Logout()
+        {
+            IAction logout = new Logout();
+            return logout.DoAction(socket);
+        }
+
         public void AddPlayer()
         {
             IAction addPlayer = new AddPlayer();
@@ -85,27 +91,22 @@ namespace OblPR.Client
                     int commandResponse = response.PMessage.Command;
 
                     if (pMessage.Parameters[0].Name.Equals("message"))
-                    {
                         Console.WriteLine(pMessage.Parameters[0].Value);
-                    }
 
                     switch (pMessage.Command)
                     {
                         case Command.MATCH_END:
-
                             match_end = true;
                             break;
 
                         case Command.ERROR:
-
+                            match_end = false;
                             break;
                     }
-
                 }
                 catch (SocketException)
                 {
                     isRunning = false;
-                    Console.WriteLine("The server is down!!");
                 }
             }
         }
