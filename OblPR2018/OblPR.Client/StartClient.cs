@@ -10,7 +10,7 @@ namespace OblPR.Client
         public string clientIp;
         public int clientPort;
         public Client clientConnected;
-         
+        private Thread thread;
         public StartClient(string ipServer, int portServer, string ipClient, int portClient)
         {
             serverIp = ipServer;
@@ -59,6 +59,12 @@ namespace OblPR.Client
 
                                                     case ClientCommand.LOGOUT:
                                                         logged = clientConnected.Logout();
+                                                        if (thread != null)
+                                                        {
+                                                            thread.Abort();
+
+                                                        }
+
                                                         break;
 
 
@@ -67,9 +73,8 @@ namespace OblPR.Client
                                                         if (joined)
                                                         {
                                                             //Open to listen server game response
-                                                            Thread thread = new Thread(ListenServerResponse);
+                                                            thread = new Thread(ListenServerResponse);
                                                             thread.Start();
-
                                                             selectedOption = null;
                                                             while (clientConnected.ClientConnected() &&
                                                                    selectedOption != ClientCommand.EXIT_GAME &&
