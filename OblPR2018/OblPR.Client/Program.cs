@@ -6,12 +6,16 @@ namespace OblPR.Client
     {
         static void Main(string[] args)
         {
-            string SERVER_IP = ConfigurationManager.AppSettings["serverIp"];
-            int SERVER_PORT = int.Parse(ConfigurationManager.AppSettings["serverPort"]);
-            string CLIENT_IP = ConfigurationManager.AppSettings["clientIp"];
-            int CLIENT_PORT = int.Parse(ConfigurationManager.AppSettings["clientPort"]);
+            var SERVER_IP = ConfigurationManager.AppSettings["serverIp"];
+            var SERVER_PORT = int.Parse(ConfigurationManager.AppSettings["serverPort"]);
 
-            var client = new StartClient(SERVER_IP,SERVER_PORT,CLIENT_IP,CLIENT_PORT);
+            var CLIENT_IP = ConfigurationManager.AppSettings["clientIp"];
+            var CLIENT_PORT = int.Parse(ConfigurationManager.AppSettings["clientPort"]);
+
+            var MULTI = bool.Parse(ConfigurationManager.AppSettings["multi"]);
+
+
+            var client = new Client(SERVER_IP,SERVER_PORT,CLIENT_IP,CLIENT_PORT, MULTI);
             client.Start();
         }
     }

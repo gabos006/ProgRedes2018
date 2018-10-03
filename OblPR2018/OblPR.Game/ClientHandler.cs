@@ -16,7 +16,6 @@ namespace OblPR.Game
         private ICharacterHandler _characterHandler;
 
         private readonly Socket _socket;
-        private Thread _requestThread;
         private Player _player;
 
         public ClientHandler(
@@ -35,8 +34,8 @@ namespace OblPR.Game
         public void Connect()
         {
             HandleClientLogin();
-            _requestThread = new Thread(ListenClientRequests);
-            _requestThread.Start();
+            var requestThread = new Thread(ListenClientRequests);
+            requestThread.Start();
         }
 
         private void ListenClientRequests()
@@ -204,9 +203,7 @@ namespace OblPR.Game
                             var protoMessage = new ProtocolMessage { Command = Command.ERROR };
                             protoMessage.Parameters.Add(param);
                             MessageHandler.SendMessage(_socket, new Message(protoMessage));
-
                         }
-
                     }
 
                 }
@@ -217,7 +214,6 @@ namespace OblPR.Game
 
             }
         }
-
 
 
         public void NotifyPlayerNear(string result)
@@ -236,7 +232,6 @@ namespace OblPR.Game
                     Disconnect();
                 }
             }
-
         }
 
         public void NotifyMatchEnd(string result)
@@ -258,8 +253,6 @@ namespace OblPR.Game
                     Disconnect();
                 }
             }
-
-
         }
 
         private void RemoveGameControls()

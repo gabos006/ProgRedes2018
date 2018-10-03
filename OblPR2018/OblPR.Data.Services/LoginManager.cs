@@ -18,9 +18,9 @@ namespace OblPR.Data.Services
             lock (Locker)
             {
                 if (_playerData.ActivePlayers.Any(x => x.Nick.Equals(userName)))
-                    throw new PlayerInUseException();
+                    throw new PlayerInUseException("Player already logged in");
                 if (!_playerData.RegisteredPlayers.Any(x => x.Nick.Equals(userName)))
-                    throw new PlayerNotFoundException();
+                    throw new PlayerNotFoundException("Player not found");
                 var player = _playerData.RegisteredPlayers.FirstOrDefault((x => x.Nick.Equals(userName)));
                 _playerData.ActivePlayers.Add(player);
                 return player;
