@@ -214,7 +214,6 @@ namespace OblPR.Client
 
                 ServerAck();
                 _loggedIn = false;
-                _socket.Close();
             }
             catch (SocketException)
             {
@@ -278,7 +277,7 @@ namespace OblPR.Client
             Console.WriteLine("1 - Move");
             Console.WriteLine("2 - Attack");
             Console.WriteLine("3 - Exit active game");
-            Console.WriteLine("0 - Log Out\n");
+            Console.WriteLine("0 - Disconnect\n");
         }
 
         private void ReadActiveGameMenu()
@@ -296,7 +295,7 @@ namespace OblPR.Client
                     ExitGame();
                     break;
                 case "0":
-                    Logout();
+                    Disconnect();
                     break;
             }
         }
@@ -307,6 +306,10 @@ namespace OblPR.Client
             {
                 var message = new ProtocolMessage { Command = Command.MATCH_END };
                 var payload = new Message(message);
+
+                if (!_playing)
+                    return;
+
                 MessageHandler.SendMessage(_socket, payload);
                 _playing = false;
             }
@@ -321,8 +324,12 @@ namespace OblPR.Client
         {
             try
             {
-                var message = new ProtocolMessage {Command = Command.ATTACK};
+                var message = new ProtocolMessage { Command = Command.ATTACK };
                 var payload = new Message(message);
+
+                if (!_playing)
+                    return;
+
                 MessageHandler.SendMessage(_socket, payload);
             }
             catch (SocketException)
@@ -345,6 +352,10 @@ namespace OblPR.Client
                 message.Parameters.Add(coordinateX);
                 message.Parameters.Add(coordinateY);
                 var payload = new Message(message);
+
+                if (!_playing)
+                    return;
+
                 MessageHandler.SendMessage(_socket, payload);
             }
             catch (SocketException)
@@ -430,7 +441,13 @@ namespace OblPR.Client
                     if (pMessage.Parameters[0].Name.Equals("message"))
                         Console.WriteLine(pMessage.Parameters[0].Value);
 
-                    _playing = (pMessage.Command != Command.MATCH_END);
+                    if (pMessage.Command == Command.MATCH_END)
+                    {
+                        var message = new ProtocolMessage { Command = Command.OK };
+                        var payload =new Message(message);
+                        MessageHandler.SendMessage(_socket, payload);
+                        _playing = false;
+                    }
 
                 }
                 catch (SocketException)
