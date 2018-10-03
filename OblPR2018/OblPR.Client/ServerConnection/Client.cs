@@ -1,6 +1,7 @@
 ﻿using OblPR.Protocol;
 using System;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 namespace OblPR.Client
@@ -22,6 +23,12 @@ namespace OblPR.Client
 
         public bool Connect(ServerEndpoint serverEndpoint)
         {
+            if (PortInUse(port))
+            {
+                Console.WriteLine("Port in use");
+                return false;
+            
+            }
             var connected = false;
 
             try
@@ -109,6 +116,27 @@ namespace OblPR.Client
                     isRunning = false;
                 }
             }
+        }
+
+        public static bool PortInUse(int port)
+        {
+            bool inUse = false;
+
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+
+
+            foreach (IPEndPoint endPoint in ipEndPoints)
+            {
+                if (endPoint.Port == port)
+                {
+                    inUse = true;
+                    break;
+                }
+            }
+
+
+            return inUse;
         }
 
         public bool ClientConnected()

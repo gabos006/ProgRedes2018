@@ -55,7 +55,7 @@ namespace OblPR.Game
 
                     for (var j = 0; j < GameConstants.BOARD_SIZE; j++)
                     {
-                        var cell = _board[i][j];
+                        var cell = _board[j][i];
                         if (cell == null)
                             line += " X ";
                         if (cell != null)
@@ -128,7 +128,6 @@ namespace OblPR.Game
             lock (_actionLock)
             {
                 var handler = (CharacterHandler)characterHandler;
-                var ap = handler.Char.Ap;
                 AttackNearbyPlayers(handler.Position, handler.Char);
             }
         }
@@ -152,7 +151,7 @@ namespace OblPR.Game
                 var handler = (CharacterHandler)characterHandler;
                 if (!IsValidMove(new Point(handler.Position.X, handler.Position.Y), p))
                     throw new InvalidMoveException("Invalid move");
-                if (!CellAvailable(p))
+                if (!CellEmpty(p))
                     throw new InvalidMoveException("Invalid move");
 
                 MovePlayerToCell(handler, p);
@@ -168,7 +167,7 @@ namespace OblPR.Game
 
         }
 
-        private bool CellAvailable(Point p)
+        private bool CellEmpty(Point p)
         {
             return _board[p.X][p.Y] == null;
         }
@@ -202,6 +201,7 @@ namespace OblPR.Game
         {
             var x = charHandler.Position.X;
             var y = charHandler.Position.Y;
+
             charHandler.Position.X = p.X;
             charHandler.Position.Y = p.Y;
 
@@ -215,58 +215,73 @@ namespace OblPR.Game
 
         private void NotifyPlayerNear(Point p, Character character)
         {
-            for (var i = -1; i <= 1; i++)
+            var pos = new int[] { -1, 0, 1 };
+            foreach (var i in pos)
             {
-                for (var j = -1; j <= 1; j++)
+                foreach (var j in pos)
                 {
-                    if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + j >= 0 && p.Y + j < GameConstants.BOARD_SIZE)
-                    {
-                        if (_board[p.X + i][p.Y + j] != null)
-                            _board[p.X + i][p.Y + j].Handler.NotifyPlayerNear(character.CharacterRole.ToString() + " near");
-                    }
-                }
+                    if (i == 0 && j == 0)
+                        continue;
 
+                    var point = new Point(p.X + i, p.Y + j);
+                    if (!IsValidPoint(point))
+                        continue;
+                    ;
+                    if (CellEmpty(point))
+                        continue;
+                    _board[point.X][point.Y].Handler.NotifyPlayerNear(character.CharacterRole.ToString() + " near");
+                }
             }
         }
 
+        private bool IsValidPoint(Point point)
+        {
+            return (point.X >= 0 && point.X < GameConstants.BOARD_SIZE) &&
+                   (point.Y >= 0 && point.Y < GameConstants.BOARD_SIZE);
+        }
+
+
         private void AttackNearbyPlayers(Point p, Character attacker)
         {
-            for (var i = -1; i <= 1; i++)
+            var pos = new int[] { -1,0,1 };
+            foreach (var i in pos)
             {
-                for (var j = -1; j <= 1; j++)
+                foreach (var j in pos)
                 {
-                    if (i == 0 || j == 0) continue;
-                    if (p.X + i >= 0 && p.X + i < GameConstants.BOARD_SIZE && p.Y + j >= 0 && p.Y + j < GameConstants.BOARD_SIZE)
-                    {
-                        var handler = _board[p.X + i][p.Y + j];
-                        if (handler != null)
-                        {
-                            attacker.Attack(handler.Char);
+                    if(i==0 && j ==0)
+                        continue;
 
-                            if (handler.IsCharacterDead())
-                            {
-                                _deadPlayers.Add(handler.Char.CurentPlayer);
-                                PlayerExit(handler, "You died");
-                            }
-                        }
-                    }
+                    var point = new Point(p.X + i, p.Y + j);
+                    
+                    if (!IsValidPoint(point))
+                        continue;
+                    ;
+                    if (CellEmpty(point))
+                        continue;
+
+                    var handler = _board[point.X][point.Y];
+
+                    attacker.Attack(handler.Char);
+
+                    if (!handler.IsCharacterDead()) continue;
+                    _deadPlayers.Add(handler.Char.CurentPlayer);
+                    PlayerExit(handler, "You died");
                 }
-
             }
         }
 
         private Point GetEmptyCell()
         {
-            int x = 0;
-            int y = 0;
+            var x = 0;
+            var y = 0;
             while (x < GameConstants.BOARD_SIZE)
             {
                 while (y < GameConstants.BOARD_SIZE)
                 {
-                    if (_board[x][y] == null)
+                    var point = new Point(x, y);
+                    if (CellEmpty(point))
                     {
-                        return new Point(x, y);
+                        return point;
                     }
                     y++;
                 }

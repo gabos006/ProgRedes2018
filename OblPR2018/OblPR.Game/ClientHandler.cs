@@ -226,7 +226,7 @@ namespace OblPR.Game
             {
                 try
                 {
-                    var param = new ProtocolParameter("message", "Player near!");
+                    var param = new ProtocolParameter("message", result);
                     var protoMessage = new ProtocolMessage { Command = Command.PLAYER_NOTIFICATION };
                     protoMessage.Parameters.Add(param);
                     MessageHandler.SendMessage(_socket, new Message(protoMessage));
