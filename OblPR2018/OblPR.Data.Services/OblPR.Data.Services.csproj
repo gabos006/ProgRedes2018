@@ -45,6 +45,7 @@
     <Compile Include="PlayerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Exceptions\PlayerNotFoundException.cs" />
+    <Compile Include="ServiceNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OblPR.Data.Entities\OblPR.Data.Entities.csproj">

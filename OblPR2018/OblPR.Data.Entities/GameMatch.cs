@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace OblPR.Data.Entities
 {
+    [Serializable]
     public class GameMatch
     {
         public Guid Id { get; private set; }

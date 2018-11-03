@@ -25,7 +25,7 @@ namespace OblPR.Game
             ChannelServices.RegisterChannel(
                 remotingTcpChannel,
                 false);
-            RemotingServices.Marshal(playerManager, "PlayerManager");
+            RemotingServices.Marshal(playerManager, ServiceNames.PlayerManager);
 
             var gameServer = new GameServer(playerManager, loginManager, matchManager);
 

@@ -5,7 +5,7 @@ namespace OblPR.Data.Services
 {
     public interface IPlayerManager
     {
-        void AddUser(Player player);
+        void AddPlayer(Player player);
         IEnumerator<Player> GetAllRegisteredPlayers();
         IEnumerator<Player> GetAllActivePlayers();
     }

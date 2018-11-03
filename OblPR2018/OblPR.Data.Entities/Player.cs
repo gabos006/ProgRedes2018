@@ -2,6 +2,7 @@
 
 namespace OblPR.Data.Entities
 {
+    [Serializable]
     public class Player
     {
 

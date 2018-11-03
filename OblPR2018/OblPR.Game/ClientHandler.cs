@@ -87,7 +87,7 @@ namespace OblPR.Game
                                     var nick = pmessage.Parameters[0].Value;
                                     var image = pmessage.Parameters[1].Value;
 
-                                    _playerManager.AddUser(new Player(nick, image));
+                                    _playerManager.AddPlayer(new Player(nick, image));
 
                                     var param = new ProtocolParameter("message", "Created");
                                     var protoMessage = new ProtocolMessage { Command = Command.OK };

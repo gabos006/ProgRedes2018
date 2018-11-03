@@ -21,7 +21,7 @@ namespace OblPR.WebService
 
             var playerManager = (IPlayerManager) Activator.GetObject(
                 typeof(IPlayerManager),
-                $"tcp://{ip}:{port}/PlayerManager");
+                $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
 
 
             config.MapHttpAttributeRoutes();
