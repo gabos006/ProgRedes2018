@@ -8,5 +8,10 @@ namespace OblPR.Data.Entities
 {
     public class GameMatch
     {
+        public Guid Id { get; private set; }
+        public DateTime Date { get; private set; }
+
+
+
     }
 }

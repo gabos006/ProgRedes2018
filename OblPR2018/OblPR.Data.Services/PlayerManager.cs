@@ -18,7 +18,7 @@ namespace OblPR.Data.Services
         {
             lock (Locker)
             {
-                if (_playerData.RegisteredPlayers.Any(x => x.Nick.Equals(player.Nick)))
+                if (_playerData.RegisteredPlayers.Any(x => (x.Nick.Equals(player.Nick)) && (x.IsActive())))
                     throw new PlayerExistsException("Player exists");
                 _playerData.RegisteredPlayers.Add(player);
             }
@@ -31,7 +31,7 @@ namespace OblPR.Data.Services
 
         public IEnumerator<Player> GetAllRegisteredPlayers()
         {
-            return _playerData.RegisteredPlayers.GetEnumerator();
+            return _playerData.RegisteredPlayers.Where(x => x.IsActive()).GetEnumerator();
         }
     }
 }

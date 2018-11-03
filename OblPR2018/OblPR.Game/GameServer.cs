@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OblPR.Data.Entities;
 using OblPR.Data.Services;
 using OblPR.Game;
 
@@ -50,6 +51,7 @@ namespace OblPR.Game
         private void CreateMatchMenu()
         {
             Console.WriteLine("Match Started");
+            var match = new GameMatch();
             _gameLogic.Start();
         }
 
