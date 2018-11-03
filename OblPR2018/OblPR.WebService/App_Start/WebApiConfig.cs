@@ -18,7 +18,7 @@ namespace OblPR.WebService
 
             var ip = ConfigurationManager.AppSettings["serverIp"];
             var port = ConfigurationManager.AppSettings["serverPort"];
-
+           
             var playerManager = (IPlayerManager) Activator.GetObject(
                 typeof(IPlayerManager),
                 $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
