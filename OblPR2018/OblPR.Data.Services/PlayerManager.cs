@@ -19,7 +19,7 @@ namespace OblPR.Data.Services
         {
             lock (Locker)
             {
-                if (playerExistsByNick(player.Nick))
+                if (PlayerExistsByNick(player.Nick))
                     throw new PlayerExistsException("Player exists");
                 _playerData.RegisteredPlayers.Add(player);
             }
@@ -29,7 +29,7 @@ namespace OblPR.Data.Services
         {
             lock (Locker)
             {
-                if (playerExistsByNick(playerName))
+                if (PlayerExistsByNick(playerName))
                     throw new PlayerExistsException("Player exists");
                 if(_playerData.ActivePlayers.Any(x => x.Nick.Equals(playerName)))
                     throw new PlayerInUseException("Cannot delete active player");
@@ -37,7 +37,7 @@ namespace OblPR.Data.Services
             }
         }
 
-        private bool playerExistsByNick(string playerName)
+        private bool PlayerExistsByNick(string playerName)
         {
             return _playerData.RegisteredPlayers.Any(x => (x.Nick.Equals(playerName)) && (x.IsActive()));
         }
