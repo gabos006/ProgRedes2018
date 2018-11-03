@@ -50,12 +50,12 @@ namespace OblPR.WebService
         }
 
         // DELETE: api/Player/5
-        public IHttpActionResult Delete(Guid id)
+        public IHttpActionResult Delete(string nick)
         {
             try
             {
                 var playerManager = GetPlayerService();
-                playerManager.DeletePlayer(id);
+                playerManager.DeletePlayer(nick);
                 return Content(HttpStatusCode.OK, "Success");
             }
             catch (Exception ex)

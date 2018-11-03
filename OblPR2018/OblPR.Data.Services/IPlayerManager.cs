@@ -8,5 +8,6 @@ namespace OblPR.Data.Services
         void AddPlayer(Player player);
         IEnumerator<Player> GetAllRegisteredPlayers();
         IEnumerator<Player> GetAllActivePlayers();
+        void DeletePlayer(string playerName);
     }
 }
