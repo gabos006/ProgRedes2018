@@ -54,7 +54,7 @@ namespace OblPR.Game
         {
             Console.WriteLine("Match Started");
             var match = _gameLogic.CreateMatch();
-            _matchManager.Add(match);
+            _matchManager.AddMatch(match);
 
         }
 
