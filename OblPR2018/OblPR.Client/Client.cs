@@ -412,7 +412,7 @@ namespace OblPR.Client
             }
             catch (SocketException)
             {
-                Disconnect();
+                Console.Write("The server is down");
             }
         }
 

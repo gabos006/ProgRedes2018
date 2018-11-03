@@ -28,7 +28,7 @@ namespace OblPR.Game
 
         public void ExitMatch()
         {
-            _logic.PlayerExit(this, "Player done");
+            _logic.PlayerExit(this, "You died");
         }
 
         public void Move(Point pos)

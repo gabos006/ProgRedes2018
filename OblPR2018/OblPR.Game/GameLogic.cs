@@ -139,6 +139,7 @@ namespace OblPR.Game
                 var handler = (CharacterHandler)characterHandler;
                 _board[handler.Position.X][handler.Position.Y] = null;
                 _activePlayers.Remove(handler);
+                _deadPlayers.Add(handler.Char.CurentPlayer);
                 handler.Handler.NotifyMatchEnd(reason);
             }
         }
@@ -264,7 +265,6 @@ namespace OblPR.Game
                     attacker.Attack(handler.Char);
 
                     if (!handler.IsCharacterDead()) continue;
-                    _deadPlayers.Add(handler.Char.CurentPlayer);
                     PlayerExit(handler, "You died");
                 }
             }
