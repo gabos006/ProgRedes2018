@@ -15,15 +15,6 @@ namespace OblPR.WebService
             //var cors = new EnableCorsAttribute("", "", "*");
             //config.EnableCors(cors);
 
-
-            var ip = ConfigurationManager.AppSettings["serverIp"];
-            var port = ConfigurationManager.AppSettings["serverPort"];
-           
-            var playerManager = (IPlayerManager) Activator.GetObject(
-                typeof(IPlayerManager),
-                $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
-
-
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
