@@ -6,8 +6,8 @@ namespace OblPR.Data.Services
     public interface IPlayerManager
     {
         void AddPlayer(Player player);
-        IEnumerator<Player> GetAllRegisteredPlayers();
-        IEnumerator<Player> GetAllActivePlayers();
+        List<Player> GetAllRegisteredPlayers();
+        List<Player> GetAllActivePlayers();
         void DeletePlayer(string playerName);
     }
 }

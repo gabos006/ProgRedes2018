@@ -3,22 +3,22 @@ using OblPR.Data.Services;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace OblPR.WebService
 {
-    public class PlayerController : ApiController
+
+    public class PlayersController : ApiController
     {
-        private IPlayerManager playerManager;
-        private int ip;
-        private int port;
-   
-        public PlayerController()
+
+        public PlayersController()
         {
 
         }
-        // POST: api/Player
+        [HttpPost]
         public IHttpActionResult Post([FromBody]AddPlayerModel playerModel)
         {
             try
@@ -34,22 +34,22 @@ namespace OblPR.WebService
             }
         }
 
-        // GET: api/Player
-        public IHttpActionResult Get()
+        [HttpGet]
+        public IHttpActionResult GetPlayers()
         {
             try
             {
                 var playerManager = GetPlayerService();
-                var listPlayers = (List<Player>)playerManager.GetAllRegisteredPlayers();
-                return Content(HttpStatusCode.OK, ParseResponsePlayers(listPlayers));
+                var listPlayers = playerManager.GetAllRegisteredPlayers();
+
+                return Ok(listPlayers.Select(x => new GetAllPlayersModel(x.Id, x.Nick)).ToList());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
-        // DELETE: api/Player/5
+        [HttpDelete]
         public IHttpActionResult Delete(string nick)
         {
             try
@@ -64,7 +64,7 @@ namespace OblPR.WebService
             }
         }
 
-        // PUT: api/Player/5
+        [HttpPut]
         public IHttpActionResult Put(Guid id, [FromBody]UpdatePlayerModel playerModel)
         {
             try
@@ -82,32 +82,15 @@ namespace OblPR.WebService
 
         private IPlayerManager GetPlayerService()
         {
-            try
-            {
-                var ip = int.Parse(ConfigurationManager.AppSettings["serverIp"]);
-                var port = int.Parse(ConfigurationManager.AppSettings["serverPort"]);
-            
-                var playerManager = (IPlayerManager)Activator.GetObject(
-                            typeof(IPlayerManager),
-                            $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
+            var ip = ConfigurationManager.AppSettings["serverIp"];
+            var port = int.Parse(ConfigurationManager.AppSettings["serverPort"]);
 
-                return playerManager;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            var playerManager = (IPlayerManager)Activator.GetObject(
+                        typeof(IPlayerManager),
+                        $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
+
+            return playerManager;
         }
 
-        private List<GetAllPlayersModel> ParseResponsePlayers(List<Player> listPlayers)
-        {
-            var result = new List<GetAllPlayersModel>();
-            foreach (var player in listPlayers)
-            {
-                var playerModel = new GetAllPlayersModel(player.Id,player.Nick);
-                result.Add(playerModel);
-            }
-            return result;
-        }
     }
 }

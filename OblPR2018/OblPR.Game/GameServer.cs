@@ -60,10 +60,10 @@ namespace OblPR.Game
 
         private void DisplayAllPlayersMenu()
         {
-            var enumerator = _playerManager.GetAllRegisteredPlayers();
-            while (enumerator.MoveNext())
+            var list = _playerManager.GetAllRegisteredPlayers();
+            foreach (var player in list)
             {
-                Console.WriteLine(enumerator.Current);
+                Console.WriteLine(player);
             }
             Console.WriteLine("");
 
@@ -71,10 +71,10 @@ namespace OblPR.Game
 
         private void DisplayConnectedPlayersMenu()
         {
-            var enumerator = _playerManager.GetAllActivePlayers();
-            while (enumerator.MoveNext())
+            var list = _playerManager.GetAllActivePlayers();
+            foreach (var player in list)
             {
-                Console.WriteLine(enumerator.Current);
+                Console.WriteLine(player);
             }
             Console.WriteLine("");
         }
