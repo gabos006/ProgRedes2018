@@ -34,6 +34,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameMatchManager.cs" />
+    <Compile Include="IGameMatchManager.cs" />
     <Compile Include="PlayerData.cs" />
     <Compile Include="Exceptions\PlayerInUseException.cs" />
     <Compile Include="ILoginManager.cs" />

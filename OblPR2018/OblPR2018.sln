@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Protocol", "OblPR.Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.Client", "OblPR.Client\OblPR.Client.csproj", "{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OblPR.WebService", "OblPR.WebService\OblPR.WebService.csproj", "{180EDCBC-C39C-46C3-A9EF-642F6B0187E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBDDA577-FA9C-43AA-8424-2ABACFCE81FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{180EDCBC-C39C-46C3-A9EF-642F6B0187E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{180EDCBC-C39C-46C3-A9EF-642F6B0187E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{180EDCBC-C39C-46C3-A9EF-642F6B0187E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{180EDCBC-C39C-46C3-A9EF-642F6B0187E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

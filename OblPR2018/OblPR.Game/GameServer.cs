@@ -10,12 +10,14 @@ namespace OblPR.Game
     {
         private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
+        private readonly IGameMatchManager _matchManager;
         private readonly GameLogic _gameLogic;
 
-        public GameServer(IPlayerManager playerManager, ILoginManager loginManager)
+        public GameServer(IPlayerManager playerManager, ILoginManager loginManager, IGameMatchManager matchManager)
         {
             this._playerManager = playerManager;
             this._loginManager = loginManager;
+            this._matchManager = matchManager;
             this._gameLogic = new GameLogic();
         }
 
@@ -51,8 +53,9 @@ namespace OblPR.Game
         private void CreateMatchMenu()
         {
             Console.WriteLine("Match Started");
-            var match = new GameMatch();
-            _gameLogic.Start();
+            var match = _gameLogic.CreateMatch();
+            _matchManager.Add(match);
+
         }
 
         private void DisplayAllPlayersMenu()
@@ -93,4 +96,5 @@ namespace OblPR.Game
 
 
     }
+
 }

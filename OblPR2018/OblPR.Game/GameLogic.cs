@@ -11,17 +11,17 @@ namespace OblPR.Game
     public class GameLogic : IGameLogic, IControlsProvider
     {
         private bool _isRunning = false;
-
+        private GameMatch _match;
         private Timer _timer;
         private CharacterHandler[][] _board;
-        private readonly List<Player> _deadPlayers;
+        private readonly List<Character> _deadPlayers;
         private readonly List<CharacterHandler> _activePlayers;
 
         private readonly object _actionLock = new object();
 
         public GameLogic()
         {
-            _deadPlayers = new List<Player>();
+            _deadPlayers = new List<Character>();
             _activePlayers = new List<CharacterHandler>();
             InitGameBoard();
         }
@@ -35,9 +35,10 @@ namespace OblPR.Game
             }
         }
 
-        public void Start()
+        public GameMatch CreateMatch()
         {
             InitGameBoard();
+            _match = new GameMatch();
             _deadPlayers.Clear();
             _activePlayers.Clear();
             _isRunning = true;
@@ -72,6 +73,7 @@ namespace OblPR.Game
                 }
             }
             Console.CursorVisible = true;
+            return _match;
         }
 
         private void StartTimer()
@@ -95,6 +97,11 @@ namespace OblPR.Game
 
             var auxiliarList = _activePlayers.ToList();
 
+            foreach (var character in _deadPlayers)
+            {
+                _match.Results.Add(new Tuple<Character, int>(character, 0));
+            }
+
             if (survivors == 0 && monsters == 0)
             {
                 //no gana nadie
@@ -105,6 +112,19 @@ namespace OblPR.Game
             {
                 foreach (var handler in auxiliarList)
                 {
+                    if (handler.Char.CharacterRole.Equals(Role.Survivor))
+                    {
+                        _match.Results.Add(new Tuple<Character, int>(handler.Char, 0));
+
+                    }
+
+                    if (handler.Char.CharacterRole.Equals(Role.Monster))
+                    {
+                        _match.Results.Add(monsters > 1
+                            ? new Tuple<Character, int>(handler.Char, 1)
+                            : new Tuple<Character, int>(handler.Char, 3));
+                    }
+
                     PlayerExit(handler, "monsters win");
                 }
                 return;
@@ -116,6 +136,17 @@ namespace OblPR.Game
 
                 foreach (var handler in auxiliarList)
                 {
+                    if (handler.Char.CharacterRole.Equals(Role.Survivor))
+                    {
+                        _match.Results.Add(survivors > 1
+                            ? new Tuple<Character, int>(handler.Char, 1)
+                            : new Tuple<Character, int>(handler.Char, 3));
+                    }
+
+                    if (handler.Char.CharacterRole.Equals(Role.Monster))
+                    {
+                        _match.Results.Add(new Tuple<Character, int>(handler.Char, 0));
+                    }
                     PlayerExit(handler, "surivors win");
                 }
 
@@ -139,7 +170,7 @@ namespace OblPR.Game
                 var handler = (CharacterHandler)characterHandler;
                 _board[handler.Position.X][handler.Position.Y] = null;
                 _activePlayers.Remove(handler);
-                _deadPlayers.Add(handler.Char.CurentPlayer);
+                _deadPlayers.Add(handler.Char);
                 handler.Handler.NotifyMatchEnd(reason);
             }
         }
@@ -244,16 +275,16 @@ namespace OblPR.Game
 
         private void AttackNearbyPlayers(Point p, Character attacker)
         {
-            var pos = new int[] { -1,0,1 };
+            var pos = new int[] { -1, 0, 1 };
             foreach (var i in pos)
             {
                 foreach (var j in pos)
                 {
-                    if(i==0 && j ==0)
+                    if (i == 0 && j == 0)
                         continue;
 
                     var point = new Point(p.X + i, p.Y + j);
-                    
+
                     if (!IsValidPoint(point))
                         continue;
                     ;
@@ -293,7 +324,7 @@ namespace OblPR.Game
 
         private bool IsDeadPlayer(Character character)
         {
-            return _deadPlayers.Any(x => x.Nick.Equals(character.CurentPlayer.Nick));
+            return _deadPlayers.Any(x => x.CurentPlayer.Nick.Equals(character.CurentPlayer.Nick));
 
         }
 

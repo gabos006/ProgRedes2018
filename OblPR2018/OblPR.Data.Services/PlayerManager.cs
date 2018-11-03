@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OblPR.Data.Entities;
 
 namespace OblPR.Data.Services
 {
-    public class PlayerManager : IPlayerManager
+    public class PlayerManager : MarshalByRefObject, IPlayerManager
     {
         private static readonly object Locker = new object();
 
