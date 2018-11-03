@@ -26,7 +26,7 @@ namespace OblPR.WebService
                 var player = new Player(playerModel.Nick, playerModel.Image);
                 var playerManager = GetPlayerService();
                 playerManager.AddPlayer(player);
-                return Created("/api/players", player);
+                return Created("/api/players", new GetPlayerModel(player.Id, player.Nick));
             }
             catch (Exception ex)
             {
@@ -42,7 +42,7 @@ namespace OblPR.WebService
                 var playerManager = GetPlayerService();
                 var listPlayers = playerManager.GetAllRegisteredPlayers();
 
-                return Ok(listPlayers.Select(x => new GetAllPlayersModel(x.Id, x.Nick)).ToList());
+                return Ok(listPlayers.Select(x => new GetPlayerModel(x.Id, x.Nick)).ToList());
             }
             catch (Exception ex)
             {

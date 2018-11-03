@@ -132,7 +132,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AddPlayerModel.cs" />
-    <Compile Include="Models\GetAllPlayersModel.cs" />
+    <Compile Include="Models\GetPlayerModel.cs" />
     <Compile Include="Models\UpdatePlayerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,12 +5,12 @@ using System.Web;
 
 namespace OblPR.WebService
 {
-    public class GetAllPlayersModel
+    public class GetPlayerModel
     {
         public Guid Id;
         public string Nick;
 
-        public GetAllPlayersModel(Guid id, string nick)
+        public GetPlayerModel(Guid id, string nick)
         {
             Id = id;
             Nick = nick;
