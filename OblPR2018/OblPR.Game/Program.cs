@@ -1,4 +1,5 @@
-﻿using OblPR.Data.Services;
+﻿using System;
+using OblPR.Data.Services;
 using System.Configuration;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -21,15 +22,23 @@ namespace OblPR.Game
             var loginManager = new LoginManager(data);
             var matchManager = new GameMatchManager();
 
-            var remotingTcpChannel = new TcpChannel(int.Parse(remotingPort));
-            ChannelServices.RegisterChannel(
-                remotingTcpChannel,
-                false);
-            RemotingServices.Marshal(playerManager, ServiceNames.PlayerManager);
+            try
+            {
+                var remotingTcpChannel = new TcpChannel(int.Parse(remotingPort));
+                ChannelServices.RegisterChannel(
+                    remotingTcpChannel,
+                    false);
+                RemotingServices.Marshal(playerManager, ServiceNames.PlayerManager);
 
-            var gameServer = new GameServer(playerManager, loginManager, matchManager);
+                var gameServer = new GameServer(playerManager, loginManager, matchManager);
 
-            gameServer.StartServer(ip, int.Parse(port));
+                gameServer.StartServer(ip, int.Parse(port));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
     }
 }

@@ -26,7 +26,7 @@ namespace OblPR.WebService
                 var player = new Player(playerModel.Nick, playerModel.Image);
                 var playerManager = GetPlayerService();
                 playerManager.AddPlayer(player);
-                return Content(HttpStatusCode.OK, "Success");
+                return Created("/api/players", player);
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace OblPR.WebService
             {
                 var playerManager = GetPlayerService();
                 playerManager.DeletePlayer(nick);
-                return Content(HttpStatusCode.OK, "Success");
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -71,14 +71,13 @@ namespace OblPR.WebService
             {
                 //var playerManager = GetPlayerService();
                 //playerManager.UpdatePlayer(player);
-                return Content(HttpStatusCode.OK, "Success");
+                return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
 
         private IPlayerManager GetPlayerService()
         {
