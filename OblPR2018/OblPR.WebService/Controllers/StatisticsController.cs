@@ -14,14 +14,14 @@ namespace OblPR.WebService.Controller
         {
 
         }
-
+        [Route("statistics")]
         [HttpGet]
         public IHttpActionResult GetStatistics()
         {
             try
             {
-                var playerManager = GetPlayerService();
-                var statistics = playerManager.GetStatistics();
+                var matchManager = GetMatchService();
+                var statistics = matchManager.GetStatistics();
 
                 return Ok(statistics.Select(x => new GetStatitsticsModel(x.Id, x.Date, x.Results)).ToList());
             }
@@ -30,14 +30,14 @@ namespace OblPR.WebService.Controller
                 return BadRequest(ex.Message);
             }
         }
-
+        [Route("ranking")]
         [HttpGet]
         public IHttpActionResult GetRanking()
         {
             try
             {
-                var playerManager = GetPlayerService();
-                var ranking = playerManager.GetRanking();
+                var matchManager = GetMatchService();
+                var ranking = matchManager.GetRanking();
                 return Ok(ranking.Select(x => new GetRankingModel(x)).ToList());
             }
             catch (Exception ex)
@@ -46,16 +46,16 @@ namespace OblPR.WebService.Controller
             }
         }
 
-        private IPlayerManager GetPlayerService()
+        private IGameMatchManager GetMatchService()
         {
             var ip = ConfigurationManager.AppSettings["serverIp"];
             var port = int.Parse(ConfigurationManager.AppSettings["serverPort"]);
 
-            var playerManager = (IPlayerManager)Activator.GetObject(
-                        typeof(IPlayerManager),
-                        $"tcp://{ip}:{port}/{ServiceNames.PlayerManager}");
+            var matchManager = (IGameMatchManager)Activator.GetObject(
+                        typeof(IGameMatchManager),
+                        $"tcp://{ip}:{port}/{ServiceNames.MatchManager}");
 
-            return playerManager;
+            return matchManager;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace OblPR.Data.Services
     public class ServiceNames
     {
         public const string PlayerManager = "PlayerManagaer";
+
+        public const string MatchManager = "MatchManager";
     }
 }
