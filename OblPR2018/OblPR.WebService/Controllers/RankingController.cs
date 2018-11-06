@@ -4,25 +4,19 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Http;
 
-namespace OblPR.WebService.Controller
+namespace OblPR.WebService.Controllers
 {
-    public class StatisticsController : ApiController
+    public class RankingController : ApiController
     {
-        public StatisticsController()
-        {
-
-        }
-
-        [Route("api/statistics")]
+        [Route("api/ranking")]
         [HttpGet]
-        public IHttpActionResult GetStatistics()
+        public IHttpActionResult GetRanking()
         {
             try
             {
                 var matchManager = GetMatchService();
-                var statistics = matchManager.GetStatistics();
-
-                return Ok(statistics.Select(x => new GetStatitsticsModel(x.Id, x.Date, x.Results)).ToList());
+                var ranking = matchManager.GetRanking();
+                return Ok(ranking.Select(x => new GetRankingModel(x)).ToList());
             }
             catch (Exception ex)
             {
