@@ -30,14 +30,14 @@ namespace OblPR.Data.Services
         {
             var results = _matches.SelectMany(x => x.Results.Select(y => new {A = y.Item1, Points = y.Item2})).ToList();
 
-            var query = from element in results
+            var query = (from element in results
                 group element by element.A
                 into g
                 select new
                 {
                     B = g.Key.CurentPlayer,
                     Sum = g.Sum(u => u.Points),
-                };
+                }).OrderByDescending(x => x.Sum);
 
 
             var ranking = from res in query.AsEnumerable()
