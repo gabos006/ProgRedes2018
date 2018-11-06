@@ -8,7 +8,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace OblPR.WebService.Controllers
+namespace OblPR.WebService
 {
 
     public class PlayersController : ApiController

@@ -2,7 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace OblPR.WebService
+namespace OblPR.GameLog
 {
     public static class WebApiConfig
     {
@@ -19,6 +19,5 @@ namespace OblPR.WebService
                 defaults: new { id = RouteParameter.Optional }
             );
         }
-
     }
 }
