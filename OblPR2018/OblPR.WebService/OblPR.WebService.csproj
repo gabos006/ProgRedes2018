@@ -137,6 +137,7 @@
     <Compile Include="Models\GetPlayerModel.cs" />
     <Compile Include="Models\GetRankingModel.cs" />
     <Compile Include="Models\GetStatitsticsModel.cs" />
+    <Compile Include="Models\MatchResultModel.cs" />
     <Compile Include="Models\UpdatePlayerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

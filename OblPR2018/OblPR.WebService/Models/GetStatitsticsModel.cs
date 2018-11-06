@@ -8,13 +8,27 @@ namespace OblPR.WebService
     {
         public Guid Id;
         public DateTime Date;
-        public List<Tuple<Character, int>> Results;
+        public List<MatchResultModel> Results;
 
-        public GetStatitsticsModel(Guid id, DateTime date, List<Tuple<Character, int>> results)
+        public GetStatitsticsModel(GameMatch game)
         {
-            this.Id = id;
-            this.Date = date;
-            this.Results = results;
+            Id = game.Id;
+            Date = game.Date;
+            Results = new List<MatchResultModel>();
+            foreach (var item in game.Results)
+            {
+                var character = item.Item1;
+                var points = item.Item2;
+
+                string gameResult = "LOSER";
+                if (points > 0)
+                {
+                    gameResult = "WINNER";
+                }
+
+                var matchResult = new MatchResultModel(character.CurentPlayer.Nick, character.CharacterRole.ToString(), gameResult);
+                Results.Add(matchResult);
+            }
         }
     }
 }
