@@ -26,22 +26,22 @@ namespace OblPR.Data.Services
             return _matches.OrderByDescending(x => x.Date).Take(10).ToList();
         }
 
-        public List<Tuple<Player, int>> GetRanking()
+        public List<PlayerScore> GetRanking()
         {
-            var results = _matches.SelectMany(x => x.Results.Select(y => new {A = y.Item1, Points = y.Item2})).ToList();
+            var results = _matches.SelectMany(x => x.Results.Select(y => new {A = y.Character, Points = y.Points})).ToList();
 
             var query = (from element in results
-                group element by element.A
+                group element by element.A.CurentPlayer
                 into g
                 select new
                 {
-                    B = g.Key.CurentPlayer,
+                    B = g.Key,
                     Sum = g.Sum(u => u.Points),
                 }).OrderByDescending(x => x.Sum);
 
 
             var ranking = from res in query.AsEnumerable()
-                select Tuple.Create(res.B, res.Sum);
+                select new PlayerScore(res.B, res.Sum);
 
             return ranking.ToList();
         }

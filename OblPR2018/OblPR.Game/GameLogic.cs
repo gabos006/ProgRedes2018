@@ -99,7 +99,7 @@ namespace OblPR.Game
 
             foreach (var character in _deadPlayers)
             {
-                _match.Results.Add(new Tuple<Character, int>(character, 0));
+                _match.Results.Add(new Result(character, 0));
             }
 
             if (survivors == 0 && monsters == 0)
@@ -114,15 +114,15 @@ namespace OblPR.Game
                 {
                     if (handler.Char.CharacterRole.Equals(Role.Survivor))
                     {
-                        _match.Results.Add(new Tuple<Character, int>(handler.Char, 0));
+                        _match.Results.Add(new Result(handler.Char, 0));
 
                     }
 
                     if (handler.Char.CharacterRole.Equals(Role.Monster))
                     {
                         _match.Results.Add(monsters > 1
-                            ? new Tuple<Character, int>(handler.Char, 1)
-                            : new Tuple<Character, int>(handler.Char, 3));
+                            ? new Result(handler.Char, 1)
+                            : new Result(handler.Char, 3));
                     }
 
                     PlayerExit(handler, "monsters win");
@@ -139,13 +139,13 @@ namespace OblPR.Game
                     if (handler.Char.CharacterRole.Equals(Role.Survivor))
                     {
                         _match.Results.Add(survivors > 1
-                            ? new Tuple<Character, int>(handler.Char, 1)
-                            : new Tuple<Character, int>(handler.Char, 3));
+                            ? new Result(handler.Char, 1)
+                            : new Result(handler.Char, 3));
                     }
 
                     if (handler.Char.CharacterRole.Equals(Role.Monster))
                     {
-                        _match.Results.Add(new Tuple<Character, int>(handler.Char, 0));
+                        _match.Results.Add(new Result(handler.Char, 0));
                     }
                     PlayerExit(handler, "surivors win");
                 }

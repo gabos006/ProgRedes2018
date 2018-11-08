@@ -4,11 +4,11 @@ namespace OblPR.WebService
 {
     public class MatchResultModel
     {
-        public string Nick;
-        public string CharacterRole;
-        public string Result;
+        public string Nick { get; private set; }
+        public string CharacterRole { get; private set; }
+        public int  Result { get; private set; }
 
-        public MatchResultModel(string nick, string role, string result)
+        public MatchResultModel(string nick, string role, int result)
         {
             Nick = nick;
             CharacterRole = role;

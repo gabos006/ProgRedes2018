@@ -8,13 +8,13 @@ namespace OblPR.WebService
 {
     public class GetRankingModel
     {
-        public String Nick;
-        public int Points;
-        
-        public GetRankingModel(Tuple<Player,int> playerPoints)
+        public string Nick { get; private set; }
+        public int Points { get; private set; }
+
+        public GetRankingModel(PlayerScore playerPoints)
         {
-            Nick = playerPoints.Item1.Nick;
-            Points = playerPoints.Item2;
+            Nick = playerPoints.Player.Nick;
+            Points = playerPoints.Score;
         }
     }
 }

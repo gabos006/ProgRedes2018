@@ -7,7 +7,7 @@ namespace OblPR.Data.Services
     public interface IGameMatchManager
     {
         void AddMatch(GameMatch match);
-        List<Tuple<Player, int>> GetRanking();
+        List<PlayerScore> GetRanking();
         List<GameMatch> GetStatistics();
     }
 }

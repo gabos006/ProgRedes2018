@@ -12,13 +12,13 @@ namespace OblPR.Data.Entities
         public Guid Id { get; private set; }
         public DateTime Date { get; private set; }
 
-        public List<Tuple<Character, int>> Results { get; private set; }
+        public List<Result> Results { get; private set; }
 
         public GameMatch()
         {
             this.Id = Guid.NewGuid();
             this.Date = DateTime.Now;
-            this.Results = new List<Tuple<Character, int>>();
+            this.Results = new List<Result>();
         }
 
     }

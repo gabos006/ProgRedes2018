@@ -22,7 +22,7 @@ namespace OblPR.WebService
                 var matchManager = GetMatchService();
                 var statistics = matchManager.GetStatistics();
 
-                return Ok(statistics.Select(x => new GetStatitsticsModel(x)).ToList());
+                return Ok(statistics.Select(x => new GetStatitsticsModel(x)));
             }
             catch (Exception ex)
             {
