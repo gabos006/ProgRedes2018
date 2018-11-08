@@ -11,14 +11,16 @@ namespace OblPR.Game
         private readonly IPlayerManager _playerManager;
         private readonly ILoginManager _loginManager;
         private readonly IGameMatchManager _matchManager;
+        private readonly IActionLogger _logger;
         private readonly GameLogic _gameLogic;
 
-        public GameServer(IPlayerManager playerManager, ILoginManager loginManager, IGameMatchManager matchManager)
+        public GameServer(IPlayerManager playerManager, ILoginManager loginManager, IGameMatchManager matchManager, IActionLogger logger)
         {
             this._playerManager = playerManager;
             this._loginManager = loginManager;
             this._matchManager = matchManager;
-            this._gameLogic = new GameLogic();
+            this._logger = logger;
+            this._gameLogic = new GameLogic(_logger);
         }
 
         public void StartServer(string ip, int port)
@@ -53,6 +55,7 @@ namespace OblPR.Game
         private void CreateMatchMenu()
         {
             Console.WriteLine("Match Started");
+            _logger.Log("Match Started");
             var match = _gameLogic.CreateMatch();
             _matchManager.AddMatch(match);
 

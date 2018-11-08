@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using OblPR.Data.Entities;
+using OblPR.Data.Services;
 using OblPR.Game;
 using OblPR.Protocol;
 
@@ -18,9 +19,11 @@ namespace OblPR.Game
         private readonly List<CharacterHandler> _activePlayers;
 
         private readonly object _actionLock = new object();
+        private readonly IActionLogger _logger;
 
-        public GameLogic()
+        public GameLogic(IActionLogger logger)
         {
+            this._logger = logger;
             _deadPlayers = new List<Character>();
             _activePlayers = new List<CharacterHandler>();
             InitGameBoard();
@@ -104,7 +107,7 @@ namespace OblPR.Game
 
             if (survivors == 0 && monsters == 0)
             {
-                //no gana nadie
+                _logger.Log("Match Draw");
                 return;
             }
 
@@ -126,6 +129,8 @@ namespace OblPR.Game
                     }
 
                     PlayerExit(handler, "monsters win");
+                    _logger.Log("monsters win");
+
                 }
                 return;
             }
@@ -148,6 +153,8 @@ namespace OblPR.Game
                         _match.Results.Add(new Result(handler.Char, 0));
                     }
                     PlayerExit(handler, "surivors win");
+                    _logger.Log("surivors win");
+
                 }
 
             }
@@ -188,6 +195,7 @@ namespace OblPR.Game
 
                 MovePlayerToCell(handler, p);
                 NotifyPlayerNear(p, handler.Char);
+                
             }
         }
 
@@ -223,7 +231,7 @@ namespace OblPR.Game
 
                 MovePlayerToCell(charHandler, p);
 
-
+                _logger.Log($"Player {character.CurentPlayer.Nick} joined game");
                 return charHandler;
             }
 
@@ -238,6 +246,8 @@ namespace OblPR.Game
             charHandler.Position.Y = p.Y;
 
             _board[p.X][p.Y] = charHandler;
+
+            _logger.Log($"Player {charHandler.Char.CurentPlayer.Nick} moved");
 
             if (x >= 0 && y >= 0)
                 _board[x][y] = null;
@@ -261,7 +271,8 @@ namespace OblPR.Game
                     ;
                     if (CellEmpty(point))
                         continue;
-                    _board[point.X][point.Y].Handler.NotifyPlayerNear(character.CharacterRole.ToString() + " near");
+                    _board[point.X][point.Y].Handler.NotifyPlayerNear($"{character.CharacterRole.ToString()} near");
+                    _logger.Log( $"{character.CharacterRole.ToString()} near");
                 }
             }
         }
@@ -297,6 +308,7 @@ namespace OblPR.Game
 
                     if (!handler.IsCharacterDead()) continue;
                     PlayerExit(handler, "You died");
+                    _logger.Log($"Player {handler.Char.CurentPlayer.Nick} died");
                 }
             }
         }
