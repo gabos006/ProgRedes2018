@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 
 namespace OblPR.GameLog
@@ -19,8 +16,8 @@ namespace OblPR.GameLog
         {
             try
             {
-                GameLogModel gameLog = new GameLogModel();
-                return Ok(gameLog.GetGameLog());
+                GameLogHandler handler = new GameLogHandler();
+                return Ok(handler.ReadLogQueue());
             }
             catch (Exception ex)
             {

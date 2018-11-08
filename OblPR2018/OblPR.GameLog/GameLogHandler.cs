@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Messaging;
-using System.Web;
 
 namespace OblPR.GameLog
 {
-    public class GameLogModel
+    public class GameLogHandler
     {
-        public GameLogModel()
+        public GameLogHandler()
         {
 
         }
 
-        public List<string> GetGameLog()
+        public List<string> ReadLogQueue()
         {
             List<string>  log = new List<string>();
             string ip = ConfigurationManager.AppSettings["serverIp"];
-            string queueName = ConfigurationManager.AppSettings["queueName"];
-
-            string serverQueueName = @"FormatName:Direct=TCP:" + ip.Trim() + @"\private$\" + queueName.Trim();
+            string serverQueueName = ConfigurationManager.AppSettings["queueName"];
 
             if (MessageQueue.Exists(serverQueueName))
             {
