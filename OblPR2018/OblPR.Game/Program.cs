@@ -9,7 +9,7 @@ using System.Messaging;
 
 namespace OblPR.Game
 {
-    class Program
+    public class Program
     {
 
 
@@ -19,12 +19,12 @@ namespace OblPR.Game
             var port = ConfigurationManager.AppSettings["serverPort"];
             var remotingPort = ConfigurationManager.AppSettings["remotingPort"];
 
-
+            var queueName = @"FormatName:DIRECT=TCP:" + ip + @"\private$\server";
             var data = new PlayerData();
             var playerManager = new PlayerManager(data);
             var loginManager = new LoginManager(data);
             var matchManager = new GameMatchManager();
-            var logger = new ActionLogger();
+            var logger = new ActionLogger(queueName);
             try
             {
                 ChannelServices.RegisterChannel(new TcpChannel(int.Parse(remotingPort)), false);

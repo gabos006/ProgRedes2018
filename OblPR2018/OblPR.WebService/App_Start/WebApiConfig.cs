@@ -13,6 +13,8 @@ namespace OblPR.WebService
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
 
+
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

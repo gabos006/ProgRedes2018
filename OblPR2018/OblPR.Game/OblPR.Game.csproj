@@ -43,7 +43,6 @@
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionLogger.cs" />
     <Compile Include="CharacterHandler.cs" />
     <Compile Include="ClientHandler.cs" />
     <Compile Include="ClientListener.cs" />
