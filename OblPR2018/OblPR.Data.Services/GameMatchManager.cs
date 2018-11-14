@@ -45,5 +45,10 @@ namespace OblPR.Data.Services
 
             return ranking.ToList();
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

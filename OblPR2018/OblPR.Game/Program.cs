@@ -28,6 +28,7 @@ namespace OblPR.Game
             try
             {
                 ChannelServices.RegisterChannel(new TcpChannel(int.Parse(remotingPort)), false);
+                RemotingConfiguration.CustomErrorsMode = CustomErrorsModes.Off;
                 RemotingServices.Marshal(playerManager, ServiceNames.PlayerManager);
                 RemotingServices.Marshal(matchManager, ServiceNames.MatchManager);
 

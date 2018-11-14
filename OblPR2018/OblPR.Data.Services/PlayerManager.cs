@@ -70,5 +70,10 @@ namespace OblPR.Data.Services
         {
             return _playerData.RegisteredPlayers.Where(x => x.IsActive()).ToList();
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }
