@@ -13,31 +13,14 @@ namespace OblPR.GameLog
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var ip = ConfigurationManager.AppSettings["serverIp"];
-            var clientQueueName = @"FormatName:DIRECT=TCP:" + ip + @"\private$\server";
-
-            using (var queue = new MessageQueue(clientQueueName))
+            GameLogHandler handler = new GameLogHandler();
+            try
             {
-
-                try
-                {
-                    queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
-                    {
-                        var result = new List<string>();
-                        var messages = queue.GetMessageEnumerator2();
-                        while (messages.MoveNext(new TimeSpan(0, 0, 1)))
-                        {
-                            result.Add($"{messages.Current.Body.ToString()}");
-                            messages.RemoveCurrent();
-                        }
-                        return Ok(result);
-
-                    }
-                }
-                catch (MessageQueueException e)
-                {
-                    return BadRequest(e.Message);
-                }
+                return Ok(handler.ReadLogQueue());
+            }
+            catch (MessageQueueException e)
+            {
+                return BadRequest(e.Message);
             }
 
         }

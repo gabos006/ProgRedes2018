@@ -14,23 +14,30 @@ namespace OblPR.GameLog
 
         public List<string> ReadLogQueue()
         {
-            List<string>  log = new List<string>();
+            List<string> result = new List<string>();
             string ip = ConfigurationManager.AppSettings["serverIp"];
             string serverQueueName = ConfigurationManager.AppSettings["queueName"];
-
-            if (MessageQueue.Exists(serverQueueName))
+            try
             {
-                using (var myQueue = new MessageQueue(serverQueueName))
+                if (MessageQueue.Exists(serverQueueName))
                 {
-                    myQueue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+                    using (var queue = new MessageQueue(serverQueueName))
                     {
-                        var firstMessage = myQueue.Receive();
-                        log.Add(firstMessage.Body.ToString());
+                        queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+                        var messages = queue.GetMessageEnumerator2();
+                        while (messages.MoveNext(new TimeSpan(0, 0, 1)))
+                        {
+                            result.Add($"{messages.Current.Body.ToString()}");
+                            messages.RemoveCurrent();
+                        }
                     }
                 }
+                return result;
             }
-
-            return log;
+            catch (MessageQueueException e)
+            {
+                throw e;
+            }
         }
     }
 }

@@ -18,8 +18,8 @@ namespace OblPR.Game
             var ip = ConfigurationManager.AppSettings["serverIp"];
             var port = ConfigurationManager.AppSettings["serverPort"];
             var remotingPort = ConfigurationManager.AppSettings["remotingPort"];
-
-            var queueName = @"FormatName:DIRECT=TCP:" + ip + @"\private$\server";
+            var queueName = ConfigurationManager.AppSettings["queueName"];
+         
             var data = new PlayerData();
             var playerManager = new PlayerManager(data);
             var loginManager = new LoginManager(data);
