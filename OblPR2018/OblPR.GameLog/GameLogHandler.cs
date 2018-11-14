@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Messaging;
 
 namespace OblPR.GameLog
@@ -19,18 +20,19 @@ namespace OblPR.GameLog
             string serverQueueName = ConfigurationManager.AppSettings["queueName"];
             try
             {
-                if (MessageQueue.Exists(serverQueueName))
+                using (var queue = new MessageQueue(serverQueueName))
                 {
-                    using (var queue = new MessageQueue(serverQueueName))
+                    queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+                    var messages = queue.GetMessageEnumerator2();
+
+                    var allMessages = queue.GetAllMessages();
+                    foreach (var message in allMessages)
                     {
-                        queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
-                        var messages = queue.GetMessageEnumerator2();
-                        while (messages.MoveNext(new TimeSpan(0, 0, 1)))
-                        {
-                            result.Add($"{messages.Current.Body.ToString()}");
-                            messages.RemoveCurrent();
-                        }
+                        result.Add(message.Body.ToString());
                     }
+
+                    // Delete all queue messages
+                    queue.Purge();
                 }
                 return result;
             }
