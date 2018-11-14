@@ -9,5 +9,7 @@ namespace OblPR.Data.Services
         List<Player> GetAllRegisteredPlayers();
         List<Player> GetAllActivePlayers();
         void DeletePlayer(string playerName);
+        void UpdatePlayer(Player player);
+
     }
 }

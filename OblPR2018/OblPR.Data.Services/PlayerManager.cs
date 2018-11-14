@@ -30,11 +30,30 @@ namespace OblPR.Data.Services
             lock (Locker)
             {
                 if (!PlayerExistsByNick(playerName))
-                    throw new PlayerExistsException("Player doesnt Exists");
+                    throw new PlayerNotFoundException("Player doesnt Exists");
                 if(_playerData.ActivePlayers.Any(x => x.Nick.Equals(playerName)))
                     throw new PlayerInUseException("Cannot delete active player");
                 _playerData.RegisteredPlayers.RemoveAll(x => x.Nick.Equals(playerName));
             }
+        }
+
+        public void UpdatePlayer(Player player)
+        {
+            lock (Locker)
+            {
+                if(!PlayerExist(player))
+                    throw new PlayerNotFoundException("Player doesnt Exists");
+                if (_playerData.ActivePlayers.Any(x => x.Id.Equals(player.Id)))
+                    throw new PlayerInUseException("Cannot update active player");
+                var update = _playerData.RegisteredPlayers.FirstOrDefault(x => x.Id.Equals(player.Id));
+                update.Image = player.Image;
+
+            }
+        }
+
+        private bool PlayerExist(Player player)
+        {
+            return _playerData.RegisteredPlayers.Any(x => x.Id.Equals(player.Id));
         }
 
         private bool PlayerExistsByNick(string playerName)

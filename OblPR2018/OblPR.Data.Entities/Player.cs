@@ -6,7 +6,7 @@ namespace OblPR.Data.Entities
     public class Player
     {
 
-        public Guid Id { get; private set; }
+        public Guid Id { get;  set; }
 
         private bool _active;
         public Player(string nickname, string image)
@@ -18,7 +18,7 @@ namespace OblPR.Data.Entities
         }
 
         public string Nick { get; }
-        public string Image { get; } = "";
+        public string Image { get; set; } = "";
 
         public void Deactivate()
         {

@@ -69,8 +69,8 @@ namespace OblPR.WebService
         {
             try
             {
-                //var playerManager = GetPlayerService();
-                //playerManager.UpdatePlayer(player);
+                var playerManager = GetPlayerService();
+                playerManager.UpdatePlayer(new Player("", playerModel.Image) {Id = id});
                 return Ok();
             }
             catch (Exception ex)
