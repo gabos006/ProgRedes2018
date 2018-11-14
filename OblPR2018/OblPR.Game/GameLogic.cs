@@ -166,6 +166,7 @@ namespace OblPR.Game
             lock (_actionLock)
             {
                 var handler = (CharacterHandler)characterHandler;
+                _logger.Log($"Player {handler.Char.CurentPlayer.Nick} attack");
                 AttackNearbyPlayers(handler.Position, handler.Char);
             }
         }

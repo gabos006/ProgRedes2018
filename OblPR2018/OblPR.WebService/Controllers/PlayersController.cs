@@ -56,7 +56,7 @@ namespace OblPR.WebService
             {
                 var playerManager = GetPlayerService();
                 playerManager.DeletePlayer(nick);
-                return Ok();
+                return Ok("Player deleted successfully");
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace OblPR.WebService
             {
                 var playerManager = GetPlayerService();
                 playerManager.UpdatePlayer(new Player("", playerModel.Image) {Id = id});
-                return Ok();
+                return Ok("Player updated successfully");
             }
             catch (Exception ex)
             {
